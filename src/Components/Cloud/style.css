@@ -1,0 +1,37 @@
+.cloud {
+    margin: 100px auto 0px auto;
+    width: 300px;
+    height: 100px;
+    border-radius: 100px;
+    position: relative;
+    background: #ffffff;
+    color: black;
+  }
+  .cloud:before,.cloud:after{
+    content: '';
+    border-radius: 100px;
+    position: absolute;
+    background: #ffffff;
+  }
+  .cloud:before{
+    width: 100px;
+    height: 100px;
+    top: -70px;
+    left: 45px;
+  }
+  .cloud:after{
+    width: 160px;
+    height: 160px;
+    top: -70px;
+    right: 45px;
+}
+.rimage {
+    position: relative;
+    left: -50%;
+    color: black;
+}
+.surrimage {
+    position: absolute;
+    left: 50%;
+    top: 60%;
+}
