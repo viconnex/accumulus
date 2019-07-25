@@ -2,16 +2,9 @@
     position: absolute;
     top: 0;
 }
-.cumulus{
-    animation-name: tombe;
-    animation-duration: 5s;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-    position: relative;
-}
+
 
 .cloud {
-    margin: 100px auto 0px auto;
     width: 300px;
     height: 100px;
     border-radius: 100px;
@@ -47,11 +40,8 @@
     left: 50%;
     top: 40%;
 }
-@keyframes tombe {
-    from {
-        transform: translateY(0px)
-    }
-    to {
-        transform: translateY(400px)
-    }
+.addCloud{
+    position: absolute;
+    top: 30px;
+    left: 30px;
 }

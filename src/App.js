@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import { Cloud } from './Components/Cloud';
+import { Ciel } from './Components/Ciel';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Cloud/>
+        <Ciel />
       </header>
     </div>
   );
