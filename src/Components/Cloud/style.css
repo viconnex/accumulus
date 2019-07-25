@@ -1,3 +1,15 @@
+.ciel{
+    position: absolute;
+    top: 0;
+}
+.cumulus{
+    animation-name: tombe;
+    animation-duration: 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    position: relative;
+}
+
 .cloud {
     margin: 100px auto 0px auto;
     width: 300px;
@@ -33,5 +45,13 @@
 .surrimage {
     position: absolute;
     left: 50%;
-    top: 60%;
+    top: 40%;
+}
+@keyframes tombe {
+    from {
+        transform: translateY(0px)
+    }
+    to {
+        transform: translateY(400px)
+    }
 }
