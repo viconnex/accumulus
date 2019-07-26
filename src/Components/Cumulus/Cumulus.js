@@ -17,7 +17,7 @@ const Cumulus = ({ chute }) => {
   // reference to the animation
 
   useEffect(() => {
-    TweenLite.to(myElement, 1, { x: 0, y: chute });
+    TweenLite.to(myElement, 3, { x: 0, y: chute });
   });
 
   return (

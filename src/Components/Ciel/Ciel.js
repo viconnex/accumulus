@@ -2,8 +2,8 @@ import React from 'react';
 import Cumulus2 from '../Cumulus/Cumulus';
 import './style.css';
 
-const cloudBaseHeight = 100;
-const cloudHeight = 170;
+const cloudBaseHeight = 50;
+const cloudHeight = 85;
 
 const Ciel = () => {
   const [clouds, setClouds] = React.useState([]);
