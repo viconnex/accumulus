@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.99ede1a4.chunk.css",
-    "main.js": "/static/js/main.04f1da72.chunk.js",
-    "main.js.map": "/static/js/main.04f1da72.chunk.js.map",
-    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
-    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/js/2.b84a0f17.chunk.js": "/static/js/2.b84a0f17.chunk.js",
-    "static/js/2.b84a0f17.chunk.js.map": "/static/js/2.b84a0f17.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.fdb8b0a740a586209e82cdc1a7a4cd7b.js": "/precache-manifest.fdb8b0a740a586209e82cdc1a7a4cd7b.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/main.99ede1a4.chunk.css.map": "/static/css/main.99ede1a4.chunk.css.map"
+    "main.css": "/accumulus/static/css/main.bb2cf86e.chunk.css",
+    "main.js": "/accumulus/static/js/main.3190aea8.chunk.js",
+    "main.js.map": "/accumulus/static/js/main.3190aea8.chunk.js.map",
+    "runtime~main.js": "/accumulus/static/js/runtime~main.21ad339a.js",
+    "runtime~main.js.map": "/accumulus/static/js/runtime~main.21ad339a.js.map",
+    "static/js/2.b84a0f17.chunk.js": "/accumulus/static/js/2.b84a0f17.chunk.js",
+    "static/js/2.b84a0f17.chunk.js.map": "/accumulus/static/js/2.b84a0f17.chunk.js.map",
+    "index.html": "/accumulus/index.html",
+    "precache-manifest.686c77d552a39f712f629b9ff5354cbc.js": "/accumulus/precache-manifest.686c77d552a39f712f629b9ff5354cbc.js",
+    "service-worker.js": "/accumulus/service-worker.js",
+    "static/css/main.bb2cf86e.chunk.css.map": "/accumulus/static/css/main.bb2cf86e.chunk.css.map"
   }
 }
