@@ -1,5 +1,6 @@
 import React from 'react';
 import Cumulus from '../Cumulus/Cumulus';
+import Textfield from '@material-ui/core/Textfield';
 import './style.css';
 
 const cloudBaseHeight = 50;
@@ -8,35 +9,34 @@ const cloudHeight = 85;
 const Ciel = () => {
   const [state, setState] = React.useState({
     clouds: [],
-    nuageName: null,
+    nuageName: '',
   });
-
   const addCloud = nuageName => {
     const l = [...state.clouds, nuageName];
-    setState({ ...state, clouds: l });
+    setState({ nuageName: '', clouds: l });
   };
 
   const dessineLeNuage = event => {
     event.preventDefault();
-    addCloud(state.nuage);
-    setState({ ...state, nuageName: null });
+    const rime = state.nuageName.split('age');
+    if (rime.length > 1 && rime[rime.length - 1] === '') {
+      addCloud(state.nuageName);
+    } else {
+      // eslint-disable-next-line no-alert
+      alert('ce mot ne rime pas avec age');
+    }
   };
 
   return (
     <div className="ciel">
       <form onSubmit={dessineLeNuage}>
-        <input
-          type="text"
+        <Textfield
           onChange={event => {
             setState({ ...state, nuageName: event.target.value });
           }}
           value={state.nuageName}
         />
-        <input type="submit" />
       </form>
-      <button onClick={addCloud} className="addCloud">
-        Nuage
-      </button>
       {state.clouds.map((nuageName, index) => {
         const chute = window.innerHeight - index * cloudHeight - cloudBaseHeight;
         return <Cumulus key={nuageName} chute={chute} nuageName={nuageName} />;
