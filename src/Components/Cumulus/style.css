@@ -29,6 +29,7 @@
     right: 22px;
 }
 .rimage {
+    font-size: 14px;
     position: relative;
     left: -50%;
     color: black;

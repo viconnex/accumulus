@@ -2,6 +2,10 @@ import React, { useEffect } from 'react';
 import { TweenLite } from 'gsap/TweenMax';
 import './style.css';
 
+const cloudBaseHeight = 50;
+const chuteMax = window.innerHeight - cloudBaseHeight;
+const deriveMax = window.innerWidth;
+
 const Nuage = ({ nuageName }) => {
   return (
     <div>
@@ -13,13 +17,15 @@ const Nuage = ({ nuageName }) => {
   );
 };
 
-const Cumulus = ({ chute, nuageName }) => {
+const Cumulus = ({ nuageName }) => {
   // reference to the DOM node
   var myElement = null;
   // reference to the animation
+  const chute = Math.floor(Math.random() * chuteMax);
+  const derive = Math.floor(Math.random() * deriveMax);
 
   useEffect(() => {
-    TweenLite.to(myElement, 3, { x: 0, y: chute });
+    TweenLite.to(myElement, 3, { x: chute, y: derive });
   });
 
   return (
