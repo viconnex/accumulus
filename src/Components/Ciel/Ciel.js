@@ -1,26 +1,45 @@
 import React from 'react';
-import Cumulus2 from '../Cumulus/Cumulus';
+import Cumulus from '../Cumulus/Cumulus';
 import './style.css';
 
 const cloudBaseHeight = 50;
 const cloudHeight = 85;
 
 const Ciel = () => {
-  const [clouds, setClouds] = React.useState([]);
+  const [state, setState] = React.useState({
+    clouds: [],
+    nuageName: null,
+  });
 
-  const addCloud = () => {
-    const l = [...clouds, clouds.length];
-    setClouds(l);
+  const addCloud = nuageName => {
+    const l = [...state.clouds, nuageName];
+    setState({ ...state, clouds: l });
+  };
+
+  const dessineLeNuage = event => {
+    event.preventDefault();
+    addCloud(state.nuage);
+    setState({ ...state, nuageName: null });
   };
 
   return (
     <div className="ciel">
+      <form onSubmit={dessineLeNuage}>
+        <input
+          type="text"
+          onChange={event => {
+            setState({ ...state, nuageName: event.target.value });
+          }}
+          value={state.nuageName}
+        />
+        <input type="submit" />
+      </form>
       <button onClick={addCloud} className="addCloud">
         Nuage
       </button>
-      {clouds.map(cloudIndex => {
-        const chute = window.innerHeight - cloudIndex * cloudHeight - cloudBaseHeight;
-        return <Cumulus2 chute={chute} />;
+      {state.clouds.map((nuageName, index) => {
+        const chute = window.innerHeight - index * cloudHeight - cloudBaseHeight;
+        return <Cumulus key={nuageName} chute={chute} nuageName={nuageName} />;
       })}
     </div>
   );

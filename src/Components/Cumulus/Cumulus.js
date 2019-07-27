@@ -2,16 +2,18 @@ import React, { useEffect } from 'react';
 import { TweenLite } from 'gsap/TweenMax';
 import './style.css';
 
-const Nuage = () => (
-  <div>
-    <div className="nuage" />
-    <div className="surrimage">
-      <div className="rimage">Nuage</div>
+const Nuage = ({ nuageName }) => {
+  return (
+    <div>
+      <div className="nuage" />
+      <div className="surrimage">
+        <div className="rimage">{nuageName}</div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
-const Cumulus = ({ chute }) => {
+const Cumulus = ({ chute, nuageName }) => {
   // reference to the DOM node
   var myElement = null;
   // reference to the animation
@@ -22,7 +24,7 @@ const Cumulus = ({ chute }) => {
 
   return (
     <div ref={div => (myElement = div)} className="cumulus">
-      <Nuage />
+      <Nuage nuageName={nuageName} />
     </div>
   );
 };

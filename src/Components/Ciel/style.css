@@ -2,6 +2,8 @@
     height: 0;
     position: absolute;
     top: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .addCloud{
