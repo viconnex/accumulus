@@ -29,7 +29,7 @@ const Ciel = () => {
 
   return (
     <div className="ciel">
-      <form onSubmit={dessineLeNuage}>
+      <form onSubmit={dessineLeNuage} className="dessinage">
         <Textfield
           onChange={event => {
             setState({ ...state, nuageName: event.target.value });
@@ -38,8 +38,7 @@ const Ciel = () => {
         />
       </form>
       {state.clouds.map((nuageName, index) => {
-        const chute = window.innerHeight - index * cloudHeight - cloudBaseHeight;
-        return <Cumulus key={nuageName} chute={chute} nuageName={nuageName} />;
+        return <Cumulus key={nuageName} nuageName={nuageName} />;
       })}
     </div>
   );

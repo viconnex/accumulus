@@ -21,12 +21,12 @@ const Cumulus = ({ nuageName }) => {
   // reference to the DOM node
   var myElement = null;
   // reference to the animation
-  const chute = Math.floor(Math.random() * chuteMax);
-  const derive = Math.floor(Math.random() * deriveMax);
 
   useEffect(() => {
-    TweenLite.to(myElement, 3, { x: chute, y: derive });
-  });
+    const chute = Math.floor(Math.random() * chuteMax);
+    const derive = Math.floor(Math.random() * deriveMax);
+    TweenLite.to(myElement, 3, { x: derive, y: chute });
+  }, [nuageName]);
 
   return (
     <div ref={div => (myElement = div)} className="cumulus">
