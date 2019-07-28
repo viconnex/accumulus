@@ -3,8 +3,9 @@ import { TweenLite } from 'gsap/TweenMax';
 import './style.css';
 
 const cloudBaseHeight = 50;
+const cloudBaseWidth = 150;
 const chuteMax = window.innerHeight - cloudBaseHeight;
-const deriveMax = window.innerWidth;
+const deriveMax = window.innerWidth - cloudBaseWidth - 5;
 
 const Nuage = ({ nuageName }) => {
   return (
