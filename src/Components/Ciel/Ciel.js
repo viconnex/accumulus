@@ -5,6 +5,11 @@ import './style.css';
 
 const rimages = require('../../utils/dictionnage.json');
 
+const rimeWith = (word, suffixe) => {
+  const preRime = word.split(suffixe);
+  return preRime.length > 1 && (preRime[preRime.length - 1] !== '' || preRime[preRime.length - 1] !== ' ');
+};
+
 const Ciel = () => {
   const [state, setState] = React.useState({
     clouds: [],
@@ -18,14 +23,14 @@ const Ciel = () => {
   const dessineLeNuage = event => {
     event.preventDefault();
     var nuageName = state.nuageName.toLocaleLowerCase();
-    const preRime = state.nuageName.split('age');
-    if (preRime.length === 1 || (preRime[preRime.length - 1] !== '' && preRime[preRime.length - 1] !== ' ')) {
+    if (!rimeWith(nuageName, 'age') && !rimeWith(nuageName, 'âge')) {
       // eslint-disable-next-line no-alert
       alert('Ce mot ne rime pas avec nuage');
       setState({ ...state, nuageName: '' });
 
       return;
     }
+
     if (nuageName.charAt(nuageName.length - 1) === ' ') {
       nuageName = nuageName.slice(0, -1);
     }
