@@ -3,9 +3,6 @@ import Cumulus from '../Cumulus/Cumulus';
 import Textfield from '@material-ui/core/Textfield';
 import './style.css';
 
-const cloudBaseHeight = 50;
-const cloudHeight = 85;
-
 const Ciel = () => {
   const [state, setState] = React.useState({
     clouds: [],
@@ -23,7 +20,7 @@ const Ciel = () => {
       addCloud(state.nuageName);
     } else {
       // eslint-disable-next-line no-alert
-      alert('ce mot ne rime pas avec age');
+      alert('Ce mot ne rime pas avec nuage');
     }
   };
 
