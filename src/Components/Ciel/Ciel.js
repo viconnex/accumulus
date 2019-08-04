@@ -26,7 +26,6 @@ const Ciel = () => {
     if (!rimeWith(nuageName, 'age') && !rimeWith(nuageName, 'âge')) {
       // eslint-disable-next-line no-alert
       alert('Ce mot ne rime pas avec nuage');
-      setState({ ...state, nuageName: '' });
 
       return;
     }
@@ -40,7 +39,7 @@ const Ciel = () => {
       return;
     }
     if (rimages[nuageName]) {
-      addCloud(state.nuageName);
+      addCloud(nuageName);
     } else {
       // eslint-disable-next-line no-alert
       alert("Ce mot n'existe pas encore");
