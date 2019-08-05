@@ -41,8 +41,9 @@ const Ciel = () => {
     if (rimages[nuageName]) {
       addCloud(nuageName);
     } else {
+      addCloud(nuageName);
       // eslint-disable-next-line no-alert
-      alert("Ce mot n'existe pas encore");
+      // alert("Ce mot n'existe pas encore");
     }
   };
 
@@ -57,7 +58,7 @@ const Ciel = () => {
             setState({ ...state, nuageName: event.target.value });
           }}
           value={state.nuageName}
-          placeholder={state.clouds.length === 0 ? 'Nom du nuage' : null}
+          placeholder={state.clouds.length === 0 ? 'Nommage' : null}
         />
       </form>
     </div>
