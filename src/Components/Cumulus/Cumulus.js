@@ -38,12 +38,14 @@ const Cumulus = ({ nuageName }) => {
     const yradius = random(1) < 0.35 ? random(chuteMax / 3, chuteMax / 2) : random(chuteMax / 6, chuteMax / 3);
     const xdecalage = deriveMax / 2 - cloudBaseWidth / 2;
     const ydecalage = chuteMax / 2 - cloudBaseHeight / 2;
+    const xspeed = random(1) < 0.2 ? random(20, 50) : random(50, 150);
+    const yspeed = random(1) < 0.2 ? random(20, 50) : random(50, 150);
 
     TweenLite.set(cumulus, {
       x: random(-twoPi, twoPi) + xdecalage,
       y: random(-twoPi, twoPi) + ydecalage,
     });
-    TweenMax.to(cumulus, random(20, 60), {
+    TweenMax.to(cumulus, xspeed, {
       x: '+=' + twoPi,
       repeat: -1,
       modifiers: {
@@ -53,7 +55,7 @@ const Cumulus = ({ nuageName }) => {
       },
     });
 
-    TweenMax.to(cumulus, random(20, 60), {
+    TweenMax.to(cumulus, yspeed, {
       y: '+=' + twoPi,
       repeat: -1,
       modifiers: {

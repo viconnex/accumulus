@@ -2,6 +2,7 @@ import React from 'react';
 import Cumulus from '../Cumulus/Cumulus';
 import Textfield from '@material-ui/core/Textfield';
 import IconButton from '@material-ui/core/IconButton';
+import { fetchRequest } from '../../utils/helpers';
 import UploadLogo from '../../icons/upload.png';
 
 import './style.css';
@@ -11,6 +12,12 @@ const rimages = require('../../utils/dictionnage.json');
 const rimeWith = (word, suffixe) => {
   const preRime = word.split(suffixe);
   return preRime.length > 1 && (preRime[preRime.length - 1] !== '' || preRime[preRime.length - 1] !== ' ');
+};
+
+const nuagesToCloud = (name, clouds) => {
+  const url = 'https://theodercafe.com/api/accumulus';
+  const body = { name, nuages: clouds };
+  fetchRequest(url, 'POST', body);
 };
 
 const Ciel = () => {
@@ -68,7 +75,7 @@ const Ciel = () => {
         <IconButton
           style={{ position: 'absolute', right: '10px', top: '5px' }}
           onClick={() => {
-            console.log('object');
+            nuagesToCloud('bibi', state.clouds);
           }}
         >
           <img src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} />
