@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/accumulus/static/css/main.68425ea4.chunk.css",
-    "main.js": "/accumulus/static/js/main.3e981bdf.chunk.js",
-    "main.js.map": "/accumulus/static/js/main.3e981bdf.chunk.js.map",
+    "main.css": "/accumulus/static/css/main.e8b9a79e.chunk.css",
+    "main.js": "/accumulus/static/js/main.1c191116.chunk.js",
+    "main.js.map": "/accumulus/static/js/main.1c191116.chunk.js.map",
     "runtime~main.js": "/accumulus/static/js/runtime~main.21ad339a.js",
     "runtime~main.js.map": "/accumulus/static/js/runtime~main.21ad339a.js.map",
-    "static/js/2.368d9b0b.chunk.js": "/accumulus/static/js/2.368d9b0b.chunk.js",
-    "static/js/2.368d9b0b.chunk.js.map": "/accumulus/static/js/2.368d9b0b.chunk.js.map",
+    "static/js/2.0285caa8.chunk.js": "/accumulus/static/js/2.0285caa8.chunk.js",
+    "static/js/2.0285caa8.chunk.js.map": "/accumulus/static/js/2.0285caa8.chunk.js.map",
     "index.html": "/accumulus/index.html",
-    "precache-manifest.fe06a3fad937721ee699515152d22f9b.js": "/accumulus/precache-manifest.fe06a3fad937721ee699515152d22f9b.js",
+    "precache-manifest.c99eff0577fa7868b330cfdb48c545cb.js": "/accumulus/precache-manifest.c99eff0577fa7868b330cfdb48c545cb.js",
     "service-worker.js": "/accumulus/service-worker.js",
-    "static/css/main.68425ea4.chunk.css.map": "/accumulus/static/css/main.68425ea4.chunk.css.map"
+    "static/css/main.e8b9a79e.chunk.css.map": "/accumulus/static/css/main.e8b9a79e.chunk.css.map"
   }
 }
