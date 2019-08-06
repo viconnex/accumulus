@@ -1,12 +1,17 @@
 .ciel{
-    height: 0;
     position: absolute;
     top: 0;
     display: flex;
-    justify-content: center;
+    width:100%;
 }
 
 .addCloud{
     position: absolute;
     top: 30px;
+}
+
+.dessinage {
+    position: absolute;
+    top: 5px;
+    left: 10px;
 }

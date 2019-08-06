@@ -1,6 +1,9 @@
 import React from 'react';
 import Cumulus from '../Cumulus/Cumulus';
 import Textfield from '@material-ui/core/Textfield';
+import IconButton from '@material-ui/core/IconButton';
+import UploadLogo from '../../icons/upload.png';
+
 import './style.css';
 
 const rimages = require('../../utils/dictionnage.json');
@@ -52,15 +55,25 @@ const Ciel = () => {
       {state.clouds.map((nuageName, index) => {
         return <Cumulus key={nuageName} nuageName={nuageName} />;
       })}
-      <form onSubmit={dessineLeNuage} className="dessinage">
-        <Textfield
-          onChange={event => {
-            setState({ ...state, nuageName: event.target.value });
+      <div className="superficiel">
+        <form onSubmit={dessineLeNuage} className="dessinage">
+          <Textfield
+            onChange={event => {
+              setState({ ...state, nuageName: event.target.value });
+            }}
+            value={state.nuageName}
+            placeholder={state.clouds.length === 0 ? 'Nommage' : null}
+          />
+        </form>
+        <IconButton
+          style={{ position: 'absolute', right: '10px', top: '5px' }}
+          onClick={() => {
+            console.log('object');
           }}
-          value={state.nuageName}
-          placeholder={state.clouds.length === 0 ? 'Nommage' : null}
-        />
-      </form>
+        >
+          <img src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} />
+        </IconButton>
+      </div>
     </div>
   );
 };
