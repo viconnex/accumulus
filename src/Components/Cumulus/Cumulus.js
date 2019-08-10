@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TweenLite, TweenMax, Linear } from 'gsap/TweenMax';
 import './style.css';
 
@@ -29,7 +29,7 @@ const Nuage = ({ nuageName }) => {
   );
 };
 
-const Cumulus = ({ nuageName }) => {
+const Cumulus = ({ nuageName, upload, handleSkyLanding }) => {
   // reference to the DOM node
   var cumulus = null;
 
@@ -65,6 +65,25 @@ const Cumulus = ({ nuageName }) => {
       },
     });
   }, [cumulus]);
+
+  const [isArrived, arrive] = useState(false);
+
+  useEffect(() => {
+    if (isArrived) handleSkyLanding();
+  }, [isArrived]);
+
+  useEffect(() => {
+    if (upload) {
+      TweenMax.to(cumulus, random(0.1, 10), {
+        x: 0,
+        y: 0,
+        onComplete: () => {
+          arrive(true);
+        },
+      });
+    }
+    return () => {};
+  }, [upload]);
 
   return (
     <div ref={div => (cumulus = div)} className="cumulus">

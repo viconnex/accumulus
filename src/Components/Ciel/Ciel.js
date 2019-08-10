@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Cumulus from '../Cumulus/Cumulus';
 import Textfield from '@material-ui/core/Textfield';
 import IconButton from '@material-ui/core/IconButton';
@@ -21,63 +21,77 @@ const nuagesToCloud = (name, clouds) => {
 };
 
 const Ciel = () => {
-  const [state, setState] = React.useState({
-    clouds: [],
-    nuageName: '',
-  });
+  const [clouds, setClouds] = useState([]);
+  const [nuageName, setNuageName] = useState('');
+  const [upload, setUpload] = useState(false);
+  const [cloudsLandedCount, setCloudsLandedCount] = useState(0);
+
   const addCloud = nuageName => {
-    const l = [...state.clouds, nuageName];
-    setState({ nuageName: '', clouds: l });
+    const l = [...clouds, nuageName];
+    setClouds(l);
+    setNuageName('');
   };
 
   const dessineLeNuage = event => {
     event.preventDefault();
-    var nuageName = state.nuageName.toLocaleLowerCase();
-    if (!rimeWith(nuageName, 'age') && !rimeWith(nuageName, 'âge')) {
+    var nuageNameLowerCase = nuageName.toLocaleLowerCase();
+    if (!rimeWith(nuageNameLowerCase, 'age') && !rimeWith(nuageNameLowerCase, 'âge')) {
       // eslint-disable-next-line no-alert
       alert('Ce mot ne rime pas avec nuage');
 
       return;
     }
 
-    if (nuageName.charAt(nuageName.length - 1) === ' ') {
-      nuageName = nuageName.slice(0, -1);
+    if (nuageNameLowerCase.charAt(nuageNameLowerCase.length - 1) === ' ') {
+      nuageNameLowerCase = nuageNameLowerCase.slice(0, -1);
     }
-    if (state.clouds.includes(nuageName)) {
-      setState({ ...state, nuageName: '' });
+    if (clouds.includes(nuageNameLowerCase)) {
+      setNuageName('');
 
       return;
     }
-    if (rimages[nuageName]) {
-      addCloud(nuageName);
-    } else {
-      addCloud(nuageName);
-      // eslint-disable-next-line no-alert
-      // alert("Ce mot n'existe pas encore");
+    addCloud(nuageName);
+    // if (rimages[nuageName]) {
+    //   addCloud(nuageName);
+    // } else {
+    //   eslint-disable-next-line no-alert
+    //   alert("Ce mot n'existe pas encore");
+    // }
+  };
+  const handleUpload = () => {
+    nuagesToCloud('bibi', clouds);
+    setUpload(true);
+  };
+
+  useEffect(() => {
+    if (upload && cloudsLandedCount >= clouds.length > 0) {
+      setUpload(false);
+      setCloudsLandedCount(0);
+      setClouds([]);
     }
+  }, [cloudsLandedCount]);
+
+  const handleSkyLanding = () => {
+    const count = cloudsLandedCount;
+    setCloudsLandedCount(count + 1);
   };
 
   return (
     <div className="ciel">
-      {state.clouds.map((nuageName, index) => {
-        return <Cumulus key={nuageName} nuageName={nuageName} />;
+      {clouds.map(nuageName => {
+        return <Cumulus key={nuageName} nuageName={nuageName} upload={upload} handleSkyLanding={handleSkyLanding} />;
       })}
       <div className="superficiel">
         <form onSubmit={dessineLeNuage} className="dessinage">
           <Textfield
             onChange={event => {
-              setState({ ...state, nuageName: event.target.value });
+              setNuageName(event.target.value);
             }}
-            value={state.nuageName}
-            placeholder={state.clouds.length === 0 ? 'Nommage' : null}
+            value={nuageName}
+            placeholder={clouds.length === 0 ? 'Nommage' : null}
           />
         </form>
-        <IconButton
-          style={{ position: 'absolute', right: '10px', top: '5px' }}
-          onClick={() => {
-            nuagesToCloud('bibi', state.clouds);
-          }}
-        >
+        <IconButton style={{ position: 'absolute', right: '10px', top: '5px' }} onClick={handleUpload}>
           <img src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} />
         </IconButton>
       </div>
