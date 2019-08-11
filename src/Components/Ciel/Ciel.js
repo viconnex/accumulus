@@ -24,6 +24,7 @@ const Ciel = () => {
   const [clouds, setClouds] = useState([]);
   const [nuageName, setNuageName] = useState('');
   const [upload, setUpload] = useState(false);
+  const [hasUploaded, setHasUploaded] = useState(false);
   const [cloudsLandedCount, setCloudsLandedCount] = useState(0);
 
   const addCloud = nuageName => {
@@ -62,6 +63,7 @@ const Ciel = () => {
     if (clouds.length > 0 && !upload) {
       nuagesToCloud('bibi', clouds);
       setUpload(true);
+      setHasUploaded(true);
     }
   };
 
@@ -90,7 +92,7 @@ const Ciel = () => {
               setNuageName(event.target.value);
             }}
             value={nuageName}
-            placeholder={clouds.length === 0 ? 'Nommage' : null}
+            placeholder={clouds.length === 0 && !hasUploaded ? 'Nommage' : null}
           />
         </form>
         <IconButton style={{ position: 'absolute', right: '10px', top: '5px' }} onClick={handleUpload}>
