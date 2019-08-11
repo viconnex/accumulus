@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TweenLite, TweenMax, Linear } from 'gsap/TweenMax';
+import { NuageShape } from './NuageShape';
 import './style.css';
 
 TweenLite.defaultEase = Linear.easeNone;
@@ -21,7 +22,7 @@ function random(min, max) {
 const Nuage = ({ nuageName }) => {
   return (
     <div>
-      <div className="nuage" />
+      <NuageShape basWidth={150} />
       <div className="surrimage">
         <div className="rimage">{nuageName}</div>
       </div>

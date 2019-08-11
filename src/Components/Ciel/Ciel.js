@@ -96,7 +96,7 @@ const Ciel = () => {
           />
         </form>
         <IconButton style={{ position: 'absolute', right: '10px', top: '5px' }} onClick={handleUpload}>
-          <img src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} className={upload && 'upload'} />
+          <img src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} className={upload ? 'upload' : ''} />
         </IconButton>
       </div>
     </div>
