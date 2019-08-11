@@ -11,7 +11,7 @@ import './style.css';
 
 const rimeWith = (word, suffixe) => {
   const preRime = word.split(suffixe);
-  return preRime.length > 1 && (preRime[preRime.length - 1] !== '' || preRime[preRime.length - 1] !== ' ');
+  return preRime.length > 1 && preRime[preRime.length - 1] === '';
 };
 
 const nuagesToCloud = (name, clouds) => {
@@ -35,7 +35,7 @@ const Ciel = () => {
 
   const dessineLeNuage = event => {
     event.preventDefault();
-    var nuageNameLowerCase = nuageName.toLocaleLowerCase();
+    var nuageNameLowerCase = nuageName.split(' ')[0].toLocaleLowerCase();
     if (!rimeWith(nuageNameLowerCase, 'age') && !rimeWith(nuageNameLowerCase, 'âge')) {
       // eslint-disable-next-line no-alert
       alert('Ce mot ne rime pas avec nuage');
@@ -51,7 +51,7 @@ const Ciel = () => {
 
       return;
     }
-    addCloud(nuageName);
+    addCloud(nuageNameLowerCase);
     // if (rimages[nuageName]) {
     //   addCloud(nuageName);
     // } else {
