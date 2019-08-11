@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TweenLite, TweenMax, Linear } from 'gsap/TweenMax';
+import { random } from '../../utils/helpers';
 import { NuageShape } from './NuageShape';
 import './style.css';
 
@@ -11,18 +12,10 @@ const chuteMax = window.innerHeight - 10;
 const deriveMax = window.innerWidth - 10;
 const twoPi = Math.PI * 2;
 
-function random(min, max) {
-  if (max == null) {
-    max = min;
-    min = 0;
-  }
-  return Math.random() * (max - min) + min;
-}
-
-const Nuage = ({ nuageName }) => {
+const Nuage = ({ nuageName, baseWidth }) => {
   return (
     <div>
-      <NuageShape basWidth={150} />
+      <NuageShape baseWidth={baseWidth} />
       <div className="surrimage">
         <div className="rimage">{nuageName}</div>
       </div>
@@ -85,9 +78,11 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding }) => {
     return () => {};
   }, [upload]);
 
+  const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
+
   return (
     <div ref={div => (cumulus = div)} className="cumulus">
-      <Nuage nuageName={nuageName} />
+      <Nuage nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
 };
