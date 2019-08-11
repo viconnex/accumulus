@@ -5,6 +5,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { fetchRequest } from 'utils/helpers';
 import UploadLogo from 'icons/upload.png';
+import RainLogo from 'icons/rain.png';
 
 import './style.css';
 
@@ -28,6 +29,8 @@ const Ciel = () => {
   const [upload, setUpload] = useState(false);
   const [hasUploaded, setHasUploaded] = useState(false);
   const [cloudsLandedCount, setCloudsLandedCount] = useState(0);
+  const [cloudsRainedCount, setCloudsRainedCount] = useState(0);
+  const [isRaining, makeItRain] = useState(false);
 
   const addCloud = nuageName => {
     const l = [...clouds, nuageName];
@@ -69,6 +72,10 @@ const Ciel = () => {
     }
   };
 
+  const handleMakeItRain = () => {
+    makeItRain(true);
+  };
+
   useEffect(() => {
     if (upload && cloudsLandedCount >= clouds.length && clouds.length > 0) {
       setUpload(false);
@@ -82,10 +89,32 @@ const Ciel = () => {
     setCloudsLandedCount(count + 1);
   };
 
+  useEffect(() => {
+    if (isRaining && cloudsRainedCount >= clouds.length && clouds.length > 0) {
+      makeItRain(false);
+      setCloudsRainedCount(0);
+      setClouds([]);
+    }
+  }, [cloudsRainedCount, isRaining, clouds]);
+
+  const handleRainOver = () => {
+    const count = cloudsRainedCount;
+    setCloudsRainedCount(count + 1);
+  };
+
   return (
     <div className="ciel">
       {clouds.map(nuageName => {
-        return <Cumulus key={nuageName} nuageName={nuageName} upload={upload} handleSkyLanding={handleSkyLanding} />;
+        return (
+          <Cumulus
+            key={nuageName}
+            nuageName={nuageName}
+            upload={upload}
+            handleSkyLanding={handleSkyLanding}
+            handleRainOver={handleRainOver}
+            isRaining={isRaining}
+          />
+        );
       })}
       <div className="superficiel">
         <form onSubmit={dessineLeNuage} className="dessinage">
@@ -97,6 +126,11 @@ const Ciel = () => {
             placeholder={clouds.length === 0 && !hasUploaded ? 'Nommage' : null}
           />
         </form>
+        <Tooltip title="Mouillage">
+          <IconButton style={{ position: 'absolute', right: '45px', top: '5px' }} onClick={handleMakeItRain}>
+            <img alt="" src={RainLogo} style={{ width: '25px', opacity: '0.9' }} />
+          </IconButton>
+        </Tooltip>
         <Tooltip title="Envoyage">
           <IconButton style={{ position: 'absolute', right: '10px', top: '5px' }} onClick={handleUpload}>
             <img alt="" src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} className={upload ? 'upload' : ''} />

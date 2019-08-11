@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TweenLite, TweenMax, Linear, Power4 } from 'gsap/TweenMax';
 import { random } from 'utils/helpers';
 import { NuageShape } from './NuageShape';
+import { RainyLetter } from './RainyLetter';
 import './style.css';
 
 TweenLite.defaultEase = Linear.easeNone;
@@ -12,18 +13,22 @@ const chuteMax = window.innerHeight - 10;
 const deriveMax = window.innerWidth - 10;
 const twoPi = Math.PI * 2;
 
-const Nuage = ({ nuageName, baseWidth }) => {
+const Nuage = ({ nuageName, baseWidth, isRaining, handleGoutteDropping }) => {
   return (
     <div>
       <NuageShape baseWidth={baseWidth} />
       <div className="surrimage">
-        <div className="rimage">{nuageName}</div>
+        <div className="rimage">
+          {nuageName.split('').map(letter => (
+            <RainyLetter letter={letter} isRaining={isRaining} handleGoutteDropping={handleGoutteDropping} />
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-const Cumulus = ({ nuageName, upload, handleSkyLanding }) => {
+const Cumulus = ({ nuageName, upload, handleSkyLanding, handleRainOver, isRaining }) => {
   // reference to the DOM node
   var cumulus = null;
 
@@ -61,15 +66,15 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding }) => {
   }, [cumulus]);
 
   const [isArrived, arrive] = useState(false);
-
   useEffect(() => {
-    if (isArrived) handleSkyLanding();
+    if (isArrived && upload) handleSkyLanding();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isArrived]);
 
   useEffect(() => {
     if (upload) {
-      TweenMax.to(cumulus, random(0.01, 2), {
+      const uploadSpeed = random(1) < 0.3 ? random(0.8, 2) : random(2, 4);
+      TweenMax.to(cumulus, uploadSpeed, {
         y: -300,
         onComplete: () => {
           arrive(true);
@@ -80,11 +85,41 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [upload]);
 
+  const [gouttesDrops, setGouttesDrops] = useState(0);
+  const [isFullyRained, setIsFullyRained] = useState(false);
+
+  const handleGoutteDropping = () => {
+    const count = gouttesDrops;
+    setGouttesDrops(count + 1);
+  };
+
+  useEffect(() => {
+    if (gouttesDrops >= nuageName.length) {
+      TweenMax.to(cumulus, 1, {
+        opacity: 0,
+        onComplete: () => {
+          setIsFullyRained(true);
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gouttesDrops]);
+
+  useEffect(() => {
+    if (isFullyRained && isRaining) handleRainOver();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFullyRained]);
+
   const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
 
   return (
     <div ref={div => (cumulus = div)} className="cumulus">
-      <Nuage nuageName={nuageName} baseWidth={baseWidth} />
+      <Nuage
+        nuageName={nuageName}
+        baseWidth={baseWidth}
+        isRaining={isRaining}
+        handleGoutteDropping={handleGoutteDropping}
+      />
     </div>
   );
 };

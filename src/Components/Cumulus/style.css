@@ -3,6 +3,7 @@
 }
 
 .rimage {
+  display: flex;
   font-size: 14px;
   position: relative;
   left: -50%;
