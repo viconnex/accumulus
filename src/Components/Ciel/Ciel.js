@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cumulus from '../Cumulus/Cumulus';
 import Textfield from '@material-ui/core/Textfield';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import { fetchRequest } from '../../utils/helpers';
 import UploadLogo from '../../icons/upload.png';
 
@@ -21,6 +22,7 @@ const nuagesToCloud = (name, clouds) => {
 };
 
 const Ciel = () => {
+  // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
   const [clouds, setClouds] = useState([]);
   const [nuageName, setNuageName] = useState('');
   const [upload, setUpload] = useState(false);
@@ -68,12 +70,12 @@ const Ciel = () => {
   };
 
   useEffect(() => {
-    if (upload && cloudsLandedCount >= clouds.length > 0) {
+    if (upload && cloudsLandedCount >= clouds.length && clouds.length > 0) {
       setUpload(false);
       setCloudsLandedCount(0);
       setClouds([]);
     }
-  }, [cloudsLandedCount]);
+  }, [cloudsLandedCount, upload, clouds]);
 
   const handleSkyLanding = () => {
     const count = cloudsLandedCount;
@@ -95,9 +97,11 @@ const Ciel = () => {
             placeholder={clouds.length === 0 && !hasUploaded ? 'Nommage' : null}
           />
         </form>
-        <IconButton style={{ position: 'absolute', right: '10px', top: '5px' }} onClick={handleUpload}>
-          <img src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} className={upload ? 'upload' : ''} />
-        </IconButton>
+        <Tooltip title="Envoyage">
+          <IconButton style={{ position: 'absolute', right: '10px', top: '5px' }} onClick={handleUpload}>
+            <img alt="" src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} className={upload ? 'upload' : ''} />
+          </IconButton>
+        </Tooltip>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TweenLite, TweenMax, Linear } from 'gsap/TweenMax';
+import { TweenLite, TweenMax, Linear, Power4 } from 'gsap/TweenMax';
 import { random } from '../../utils/helpers';
 import { NuageShape } from './NuageShape';
 import './style.css';
@@ -64,18 +64,20 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding }) => {
 
   useEffect(() => {
     if (isArrived) handleSkyLanding();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isArrived]);
 
   useEffect(() => {
     if (upload) {
-      TweenMax.to(cumulus, random(0.01, 3), {
-        y: -100,
+      TweenMax.to(cumulus, random(0.01, 2), {
+        y: -300,
         onComplete: () => {
           arrive(true);
         },
+        ease: Power4.easeIn,
       });
     }
-    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [upload]);
 
   const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
