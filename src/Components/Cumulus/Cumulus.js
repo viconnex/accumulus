@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { TweenLite, TweenMax, Linear, Power4 } from 'gsap/TweenMax';
-import { random } from '../../utils/helpers';
+import { random } from 'utils/helpers';
 import { NuageShape } from './NuageShape';
 import './style.css';
 

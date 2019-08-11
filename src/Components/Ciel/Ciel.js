@@ -3,12 +3,12 @@ import Cumulus from '../Cumulus/Cumulus';
 import Textfield from '@material-ui/core/Textfield';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import { fetchRequest } from '../../utils/helpers';
-import UploadLogo from '../../icons/upload.png';
+import { fetchRequest } from 'utils/helpers';
+import UploadLogo from 'icons/upload.png';
 
 import './style.css';
 
-// const rimages = require('../../utils/dictionnage.json');
+// const rimages = require('utils/dictionnage.json');
 
 const rimeWith = (word, suffixe) => {
   const preRime = word.split(suffixe);
