@@ -74,9 +74,8 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding }) => {
 
   useEffect(() => {
     if (upload) {
-      TweenMax.to(cumulus, random(0.1, 10), {
-        x: 0,
-        y: 0,
+      TweenMax.to(cumulus, random(0.01, 3), {
+        y: -100,
         onComplete: () => {
           arrive(true);
         },

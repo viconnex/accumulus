@@ -1,17 +1,30 @@
-.ciel{
-    position: absolute;
-    top: 0;
-    display: flex;
-    width:100%;
+.ciel {
+  position: absolute;
+  top: 0;
+  display: flex;
+  width: 100%;
 }
 
-.addCloud{
-    position: absolute;
-    top: 30px;
+.addCloud {
+  position: absolute;
+  top: 30px;
 }
 
 .dessinage {
-    position: absolute;
-    top: 5px;
-    left: 10px;
+  position: absolute;
+  top: 5px;
+  left: 10px;
+}
+
+.upload {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }

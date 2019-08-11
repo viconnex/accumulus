@@ -7,7 +7,7 @@ import UploadLogo from '../../icons/upload.png';
 
 import './style.css';
 
-const rimages = require('../../utils/dictionnage.json');
+// const rimages = require('../../utils/dictionnage.json');
 
 const rimeWith = (word, suffixe) => {
   const preRime = word.split(suffixe);
@@ -59,8 +59,10 @@ const Ciel = () => {
     // }
   };
   const handleUpload = () => {
-    nuagesToCloud('bibi', clouds);
-    setUpload(true);
+    if (clouds.length > 0 && !upload) {
+      nuagesToCloud('bibi', clouds);
+      setUpload(true);
+    }
   };
 
   useEffect(() => {
@@ -92,7 +94,7 @@ const Ciel = () => {
           />
         </form>
         <IconButton style={{ position: 'absolute', right: '10px', top: '5px' }} onClick={handleUpload}>
-          <img src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} />
+          <img src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} className={upload && 'upload'} />
         </IconButton>
       </div>
     </div>
