@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/accumulus/static/css/main.de28796a.chunk.css",
-    "main.js": "/accumulus/static/js/main.91604393.chunk.js",
-    "main.js.map": "/accumulus/static/js/main.91604393.chunk.js.map",
+    "main.js": "/accumulus/static/js/main.61d2fa9b.chunk.js",
+    "main.js.map": "/accumulus/static/js/main.61d2fa9b.chunk.js.map",
     "runtime~main.js": "/accumulus/static/js/runtime~main.21ad339a.js",
     "runtime~main.js.map": "/accumulus/static/js/runtime~main.21ad339a.js.map",
     "static/js/2.04fe94b2.chunk.js": "/accumulus/static/js/2.04fe94b2.chunk.js",
     "static/js/2.04fe94b2.chunk.js.map": "/accumulus/static/js/2.04fe94b2.chunk.js.map",
     "index.html": "/accumulus/index.html",
-    "precache-manifest.ab3abaebd3ca0ab727e443f895ec1c12.js": "/accumulus/precache-manifest.ab3abaebd3ca0ab727e443f895ec1c12.js",
+    "precache-manifest.061eb5c3eea648d96bbc35ee748f6009.js": "/accumulus/precache-manifest.061eb5c3eea648d96bbc35ee748f6009.js",
     "service-worker.js": "/accumulus/service-worker.js",
     "static/css/main.de28796a.chunk.css.map": "/accumulus/static/css/main.de28796a.chunk.css.map",
     "static/media/rain.png": "/accumulus/static/media/rain.948824f2.png"
