@@ -31,6 +31,8 @@ const Nuage = ({ nuageName, baseWidth, isRaining, handleGoutteDropping }) => {
 const Cumulus = ({ nuageName, upload, handleSkyLanding, handleRainOver, isRaining }) => {
   // reference to the DOM node
   var cumulus = null;
+  const [isVisibleX, setIsVisibleX] = useState(false);
+  const [isVisibleY, setIsVisibleY] = useState(false);
 
   useEffect(() => {
     const xradius = random(1) < 0.35 ? random(deriveMax / 3, deriveMax / 2) : random(deriveMax / 6, deriveMax / 3);
@@ -44,6 +46,7 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding, handleRainOver, isRainin
       x: random(-twoPi, twoPi) + xdecalage,
       y: random(-twoPi, twoPi) + ydecalage,
     });
+
     TweenMax.to(cumulus, xspeed, {
       x: '+=' + twoPi,
       repeat: -1,
@@ -52,6 +55,7 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding, handleRainOver, isRainin
           return Math.cos(x) * xradius + xdecalage;
         },
       },
+      onStart: () => setIsVisibleX(true),
     });
 
     TweenMax.to(cumulus, yspeed, {
@@ -62,6 +66,7 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding, handleRainOver, isRainin
           return Math.sin(y) * yradius + ydecalage;
         },
       },
+      onStart: () => setIsVisibleY(true),
     });
   }, [cumulus]);
 
@@ -113,7 +118,7 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding, handleRainOver, isRainin
   const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
 
   return (
-    <div ref={div => (cumulus = div)} className="cumulus">
+    <div ref={div => (cumulus = div)} className="cumulus" style={{ opacity: isVisibleX && isVisibleY ? 1 : 0 }}>
       <Nuage
         nuageName={nuageName}
         baseWidth={baseWidth}

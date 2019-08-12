@@ -19,7 +19,7 @@ export const RainyLetter = ({ letter, isRaining, handleGoutteDropping }) => {
       TweenMax.to(goutte, 1, {
         y: chuteMax + 100,
         ease: Power2.easeIn,
-        delay: random(0, 2),
+        delay: random(0.3, 4),
         onStart: () => setIsDropped(true),
       });
     }
