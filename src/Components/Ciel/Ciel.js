@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import Cumulus from '../Cumulus/Cumulus';
+import sockeIOClient from 'socket.io-client';
+
 import Textfield from '@material-ui/core/Textfield';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
+
 import { fetchRequest } from 'utils/helpers';
 import UploadLogo from 'icons/upload.png';
 import RainLogo from 'icons/rain.png';
 
+import Cumulus from '../Cumulus/Cumulus';
 import './style.css';
 
 // const rimages = require('utils/dictionnage.json');
@@ -22,7 +25,9 @@ const nuagesToCloud = (name, clouds) => {
   fetchRequest(url, 'POST', body);
 };
 
-const Ciel = () => {
+const socket = sockeIOClient('http://localhost:4002');
+
+const Ciel = ({ cloud9 }) => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
   const [clouds, setClouds] = useState([]);
   const [nuageName, setNuageName] = useState('');
@@ -31,6 +36,16 @@ const Ciel = () => {
   const [cloudsLandedCount, setCloudsLandedCount] = useState(0);
   const [cloudsRainedCount, setCloudsRainedCount] = useState(0);
   const [isRaining, makeItRain] = useState(false);
+
+  useEffect(() => {
+    function handleUpcoming(upcomingClouds) {
+      const l = [...clouds, ...upcomingClouds.filter(newCloud => !clouds.includes(newCloud))];
+      setClouds(l);
+    }
+    if (cloud9) {
+      socket.on('upload', handleUpcoming);
+    }
+  }, [clouds]);
 
   const addCloud = nuageName => {
     const l = [...clouds, nuageName];
@@ -44,7 +59,6 @@ const Ciel = () => {
     if (!rimeWith(nuageNameLowerCase, 'age') && !rimeWith(nuageNameLowerCase, 'âge')) {
       // eslint-disable-next-line no-alert
       alert('Ce mot ne rime pas avec nuage');
-
       return;
     }
 
@@ -53,18 +67,15 @@ const Ciel = () => {
     }
     if (clouds.includes(nuageNameLowerCase)) {
       setNuageName('');
-
       return;
     }
     addCloud(nuageNameLowerCase);
-    // if (rimages[nuageName]) {
-    //   addCloud(nuageName);
-    // } else {
-    //   eslint-disable-next-line no-alert
-    //   alert("Ce mot n'existe pas encore");
-    // }
   };
   const handleUpload = () => {
+    if (clouds.length === 0) {
+      // eslint-disable-next-line no-alert
+      alert('Pas de nuage prêt pour le voyage');
+    }
     if (clouds.length > 0 && !upload) {
       nuagesToCloud('bibi', clouds);
       setUpload(true);
@@ -73,6 +84,11 @@ const Ciel = () => {
   };
 
   const handleMakeItRain = () => {
+    if (clouds.length === 0) {
+      // eslint-disable-next-line no-alert
+      alert('Pas de nuage dans les parages');
+      return;
+    }
     makeItRain(true);
     setHasAlreadyDrawn(true);
   };
@@ -81,6 +97,7 @@ const Ciel = () => {
     if (upload && cloudsLandedCount >= clouds.length && clouds.length > 0) {
       setUpload(false);
       setCloudsLandedCount(0);
+      if (!cloud9) socket.emit('upload', clouds);
       setClouds([]);
     }
   }, [cloudsLandedCount, upload, clouds]);
