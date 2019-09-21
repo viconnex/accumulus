@@ -11,7 +11,7 @@ import RainLogo from 'icons/rain.png';
 
 import Cumulus from '../Cumulus/Cumulus';
 import './style.css';
-import { API_BASE_URL } from 'utils/constants';
+import { API_BASE_URL, API_GATEWAY_URL } from 'utils/constants';
 
 // const rimages = require('utils/dictionnage.json');
 
@@ -26,7 +26,7 @@ const nuagesToCloud = (name, clouds) => {
   fetchRequest(url, 'POST', body);
 };
 
-const socket = sockeIOClient('http://localhost:4002');
+const socket = sockeIOClient(API_GATEWAY_URL);
 
 const Ciel = ({ cloud9 }) => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
