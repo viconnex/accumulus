@@ -11,6 +11,7 @@ import RainLogo from 'icons/rain.png';
 
 import Cumulus from '../Cumulus/Cumulus';
 import './style.css';
+import { API_BASE_URL } from 'utils/constants';
 
 // const rimages = require('utils/dictionnage.json');
 
@@ -20,7 +21,7 @@ const rimeWith = (word, suffixe) => {
 };
 
 const nuagesToCloud = (name, clouds) => {
-  const url = 'https://theodercafe.com/api/accumulus';
+  const url = `${API_BASE_URL}/accumulus`;
   const body = { name, nuages: clouds };
   fetchRequest(url, 'POST', body);
 };
@@ -74,7 +75,7 @@ const Ciel = ({ cloud9 }) => {
   const handleUpload = () => {
     if (clouds.length === 0) {
       // eslint-disable-next-line no-alert
-      alert('Pas de nuage prêt pour le voyage');
+      alert('Pas de nuage en partance pour le voyage. Trouve un nommage');
     }
     if (clouds.length > 0 && !upload) {
       nuagesToCloud('bibi', clouds);
@@ -86,7 +87,7 @@ const Ciel = ({ cloud9 }) => {
   const handleMakeItRain = () => {
     if (clouds.length === 0) {
       // eslint-disable-next-line no-alert
-      alert('Pas de nuage dans les parages');
+      alert('Pas de nuage dans les parages.');
       return;
     }
     makeItRain(true);
