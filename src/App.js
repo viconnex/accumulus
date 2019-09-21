@@ -1,15 +1,15 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
 import './App.css';
 import { Ciel } from './Components/Ciel';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/">
       <div className="App">
         <header className="App-header">
-          <Route exact path="/cloud-nine" render={() => <Ciel cloud9 />} />
-          <Route path="/" component={() => <Ciel cloud9={false} />} />
+          <Route path="/cloud-nine" render={() => <Ciel cloud9 />} />
+          <Route exact path="/" component={() => <Ciel cloud9={false} />} />
         </header>
       </div>
     </Router>

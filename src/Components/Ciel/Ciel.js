@@ -11,7 +11,7 @@ import RainLogo from 'icons/rain.png';
 
 import Cumulus from '../Cumulus/Cumulus';
 import './style.css';
-import { API_BASE_URL, API_GATEWAY_URL } from 'utils/constants';
+import { API_BASE_URL, API_GATEWAY_URL, API_GATEWAY_PATH } from 'utils/constants';
 
 // const rimages = require('utils/dictionnage.json');
 
@@ -26,7 +26,7 @@ const nuagesToCloud = (name, clouds) => {
   fetchRequest(url, 'POST', body);
 };
 
-const socket = sockeIOClient(API_GATEWAY_URL);
+const socket = sockeIOClient(API_GATEWAY_URL, { path: API_GATEWAY_PATH });
 
 const Ciel = ({ cloud9 }) => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
@@ -78,7 +78,7 @@ const Ciel = ({ cloud9 }) => {
       alert('Pas de nuage en partance pour le voyage. Trouve un nommage');
     }
     if (clouds.length > 0 && !upload) {
-      nuagesToCloud('bibi', clouds);
+      nuagesToCloud('envoyage', clouds);
       setUpload(true);
       setHasAlreadyDrawn(true);
     }
@@ -90,6 +90,7 @@ const Ciel = ({ cloud9 }) => {
       alert('Pas de nuage dans les parages.');
       return;
     }
+    nuagesToCloud('mouillage', clouds);
     makeItRain(true);
     setHasAlreadyDrawn(true);
   };
