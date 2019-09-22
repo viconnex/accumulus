@@ -1,3 +1,5 @@
+import json
+
 from flask import Flask
 from flask import request
 app = Flask(__name__)
@@ -49,6 +51,33 @@ def json_example():
            The Python version is: {}
            The item at index 0 in the example list is: {}
            '''.format(language, framework, python_version, example, boolean_test)
+
+
+
+import random
+
+def distance(word1, word2):
+    """todo"""
+    return random.randint(1, 101)
+
+
+def compute_location(similarity1, similarity2):
+    return similarity2 / (similarity1 + similarity2)
+
+
+@app.route('/similarity', methods=['POST']) #GET requests will be blocked
+def similarity_word_listchords():
+    req_data = request.get_json()
+    print(req_data)
+
+    word = req_data['word']
+    list_chords = req_data['listchords']
+    for chords in list_chords:
+         similarity1 = distance(word, chords["word1"])
+         similarity2 = distance(word, chords["word2"])
+         chords["location"] = compute_location(similarity1, similarity2)
+    return json.dumps(list_chords)
+
 
 
 if __name__ == '__main__':
