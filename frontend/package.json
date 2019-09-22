@@ -13,7 +13,7 @@
     "socket.io-client": "^2.2.0",
     "styled-components": "^4.3.2"
   },
-  "homepage": "https://victorbrun.github.io/accumulus",
+  "homepage": "https://infusion-co.github.io/accumulus",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
