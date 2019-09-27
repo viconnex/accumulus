@@ -4,14 +4,21 @@ import Textfield from '@material-ui/core/Textfield';
 
 import './style.css';
 import Musicumulus from 'Components/Cumulus/Musicumulus';
-import { CloudChord } from 'Components/CloudChord';
 import { AirGuitar } from 'Components/AirGuitar';
 
-const cloudBaseHeight = 50;
 const cloudBaseWidth = 150;
+const cloudHeight = cloudBaseWidth / 3 + (cloudBaseWidth * 35) / 150;
 const chuteMax = window.innerHeight;
 const deriveMax = window.innerWidth - cloudBaseWidth;
-const twoPi = Math.PI * 2;
+
+const verticalspace = 1.8 * cloudHeight;
+
+const chords = [
+  { chordAltitude: chuteMax - cloudHeight, leftNote: 'Ricochet', rightNote: 'Simulacre' },
+  { chordAltitude: chuteMax - verticalspace - cloudHeight, leftNote: 'Fantome', rightNote: 'Mur' },
+  { chordAltitude: chuteMax - 2 * verticalspace - cloudHeight, leftNote: 'Calme', rightNote: 'Vent' },
+  { chordAltitude: chuteMax - 3 * verticalspace - cloudHeight, leftNote: 'Machicoulis', rightNote: 'Vitre' },
+];
 
 const Musiciel = () => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
@@ -29,17 +36,15 @@ const Musiciel = () => {
     event.preventDefault();
     var nuageNameLowerCase = nuageName.split(' ')[0].toLocaleLowerCase();
 
-    if (clouds.includes(nuageNameLowerCase)) {
-      setNuageName('');
-      return;
-    }
+    // if (clouds.includes(nuageNameLowerCase)) {
+    //   setNuageName('');
+    //   return;
+    // }
     addCloud(nuageNameLowerCase);
     setHasAlreadyDrawn(true);
   };
 
-  const chords = [chuteMax - 150, chuteMax - 300, chuteMax - 450, chuteMax - 600];
-
-  const musicSheet = chords.map(chord => ({ chord, note: Math.random() * deriveMax }));
+  const musicSheet = chords.map(chord => ({ chordAltitude: chord.chordAltitude, note: Math.random() * deriveMax }));
 
   return (
     <div className="ciel">

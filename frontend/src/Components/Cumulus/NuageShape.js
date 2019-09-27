@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const NuageShape = styled.div`
-  opacity: 0.7;
+  /* opacity: 0.7; */
   width: ${props => props.baseWidth}px;
   height: ${props => props.baseWidth / 3}px;
   border-radius: ${props => props.baseWidth}px;

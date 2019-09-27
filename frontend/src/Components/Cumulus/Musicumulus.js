@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { TweenLite, TweenMax, Linear, Power4 } from 'gsap/TweenMax';
 import { random } from 'utils/helpers';
-import { NuageShape } from './NuageShape';
 import { Nuage } from './Nuage';
-import { RainyLetter } from './RainyLetter';
 import './style.css';
 
 // TweenLite.defaultEase = Linear.easeNone;
 
-const cloudBaseHeight = 50;
-const cloudBaseWidth = 150;
 const chuteMax = window.innerHeight - 10;
-const deriveMax = window.innerWidth - cloudBaseWidth;
-const twoPi = Math.PI * 2;
 
 const Musicumulus = ({ nuageName, musicSheet }) => {
   // reference to the DOM node
@@ -31,9 +25,9 @@ const Musicumulus = ({ nuageName, musicSheet }) => {
     };
 
     const twinTo = (index, cumulus) => () => {
-      TweenMax.to(cumulus, 1, {
+      TweenMax.to(cumulus, random(0.4, 2), {
         x: musicSheet[index].note,
-        y: musicSheet[index].chord,
+        y: musicSheet[index].chordAltitude,
         onComplete: index < musicSheet.length - 1 ? twinTo(index + 1, cumulus) : blowUp(cumulus),
         // ease: Power4.easeOut,
       });
