@@ -48,14 +48,15 @@ const Musiciel = () => {
     //   setNuageName('');
     //   return;
     // }
-    addCloud(nuageNameLowerCase);
     const body = {
       word: nuageNameLowerCase,
       listchords,
     };
     const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', body);
-    console.log('response', response);
-    fetch('http://localhost/word_music_sheet');
+    const sheet = await response.json();
+    console.log('sheet', sheet);
+    addCloud(nuageNameLowerCase);
+
     setHasAlreadyDrawn(true);
   };
 
