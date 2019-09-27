@@ -5,7 +5,7 @@ const AirGuitar = ({ chords }) => {
   return (
     <div>
       {chords.map(chord => {
-        return <CloudChord chord={chord} />;
+        return <CloudChord key={chord.chordAltitude} chord={chord} />;
       })}
     </div>
   );

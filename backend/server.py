@@ -74,10 +74,10 @@ def similarity_word_listchords():
     print(req_data)
 
     word = req_data['word']
-    list_chords = req_data['listchords']
+    list_chords = req_data['chords']
     for chords in list_chords:
-         similarity1 = distance(word, chords["word1"])
-         similarity2 = distance(word, chords["word2"])
+         similarity1 = distance(word, chords["leftNote"])
+         similarity2 = distance(word, chords["rightNote"])
          chords["note"] = compute_location(similarity1, similarity2)
     return json.dumps(list_chords)
 

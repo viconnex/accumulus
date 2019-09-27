@@ -8,13 +8,13 @@ import './style.css';
 
 const chuteMax = window.innerHeight - 10;
 
-const Musicumulus = ({ nuageName, musicSheet }) => {
+const Musicumulus = ({ nuageName, musicSheet, deriveMax }) => {
   // reference to the DOM node
   var cumulus = null;
 
   useEffect(() => {
     TweenLite.set(cumulus, {
-      x: musicSheet[0].note,
+      x: musicSheet[0].note * deriveMax,
       y: chuteMax,
     });
 
@@ -26,7 +26,7 @@ const Musicumulus = ({ nuageName, musicSheet }) => {
 
     const twinTo = (index, cumulus) => () => {
       TweenMax.to(cumulus, random(0.4, 2), {
-        x: musicSheet[index].note,
+        x: musicSheet[index].note * deriveMax,
         y: musicSheet[index].chordAltitude,
         onComplete: index < musicSheet.length - 1 ? twinTo(index + 1, cumulus) : blowUp(cumulus),
         // ease: Power4.easeOut,
