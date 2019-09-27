@@ -9,9 +9,8 @@ function App() {
     <Router basename="/">
       <div className="App">
         <header className="App-header">
-          <Route path="/musiciel" render={() => <Musiciel />} />
           <Route path="/cloud-nine" render={() => <Ciel cloud9 />} />
-          <Route exact path="/" component={() => <Ciel cloud9={false} />} />
+          <Route exact path="/" component={() => <Musiciel />} />
         </header>
       </div>
     </Router>

@@ -5,10 +5,11 @@ import Textfield from '@material-ui/core/Textfield';
 import './style.css';
 import Musicumulus from 'Components/Cumulus/Musicumulus';
 import { CloudChord } from 'Components/CloudChord';
+import { AirGuitar } from 'Components/AirGuitar';
 
 const cloudBaseHeight = 50;
 const cloudBaseWidth = 150;
-const chuteMax = window.innerHeight - 10;
+const chuteMax = window.innerHeight;
 const deriveMax = window.innerWidth - cloudBaseWidth;
 const twoPi = Math.PI * 2;
 
@@ -45,7 +46,7 @@ const Musiciel = () => {
       {clouds.map(nuageName => {
         return <Musicumulus key={nuageName} nuageName={nuageName} musicSheet={musicSheet} />;
       })}
-      <CloudChord />
+      <AirGuitar chords={chords} />
       <div className="superficiel">
         <form onSubmit={dessineLeNuage} className="dessinage">
           <Textfield
