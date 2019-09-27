@@ -26,7 +26,7 @@ const nuagesToCloud = (name, clouds) => {
   fetchRequest(url, 'POST', body);
 };
 
-const socket = sockeIOClient(API_GATEWAY_URL, { path: API_GATEWAY_PATH });
+// const socket = sockeIOClient(API_GATEWAY_URL, { path: API_GATEWAY_PATH });
 
 const Ciel = ({ cloud9 }) => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
@@ -44,7 +44,7 @@ const Ciel = ({ cloud9 }) => {
       setClouds(l);
     }
     if (cloud9) {
-      socket.on('upload', handleUpcoming);
+      // socket.on('upload', handleUpcoming);
     }
   }, [clouds]);
 
@@ -99,7 +99,7 @@ const Ciel = ({ cloud9 }) => {
     if (upload && cloudsLandedCount >= clouds.length && clouds.length > 0) {
       setUpload(false);
       setCloudsLandedCount(0);
-      if (!cloud9) socket.emit('upload', clouds);
+      // if (!cloud9) socket.emit('upload', clouds);
       setClouds([]);
     }
   }, [cloudsLandedCount, upload, clouds]);

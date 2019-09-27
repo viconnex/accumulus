@@ -65,7 +65,7 @@ def compute_location(similarity1, similarity2):
     return similarity2 / (similarity1 + similarity2)
 
 
-@app.route('/similarity', methods=['POST']) #GET requests will be blocked
+@app.route('/word_music_sheet', methods=['POST']) #GET requests will be blocked
 def similarity_word_listchords():
     req_data = request.get_json()
     print(req_data)
@@ -75,7 +75,7 @@ def similarity_word_listchords():
     for chords in list_chords:
          similarity1 = distance(word, chords["word1"])
          similarity2 = distance(word, chords["word2"])
-         chords["location"] = compute_location(similarity1, similarity2)
+         chords["note"] = compute_location(similarity1, similarity2)
     return json.dumps(list_chords)
 
 

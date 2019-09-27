@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Textfield from '@material-ui/core/Textfield';
 
+import { fetchRequest } from 'utils/helpers';
 import './style.css';
 import Musicumulus from 'Components/Cumulus/Musicumulus';
 import { AirGuitar } from 'Components/AirGuitar';
@@ -20,6 +21,13 @@ const chords = [
   { chordAltitude: chuteMax - 3 * verticalspace - cloudHeight, leftNote: 'Machicoulis', rightNote: 'Vitre' },
 ];
 
+const listchords = [
+  { chordAltitude: chuteMax - cloudHeight, word1: 'Ricochet', word2: 'Simulacre' },
+  { chordAltitude: chuteMax - verticalspace - cloudHeight, word1: 'Fantome', word2: 'Mur' },
+  { chordAltitude: chuteMax - 2 * verticalspace - cloudHeight, word1: 'Calme', word2: 'Vent' },
+  { chordAltitude: chuteMax - 3 * verticalspace - cloudHeight, word1: 'Machicoulis', word2: 'Vitre' },
+];
+
 const Musiciel = () => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
   const [clouds, setClouds] = useState([]);
@@ -32,7 +40,7 @@ const Musiciel = () => {
     setNuageName('');
   };
 
-  const dessineLeNuage = event => {
+  const dessineLeNuage = async event => {
     event.preventDefault();
     var nuageNameLowerCase = nuageName.split(' ')[0].toLocaleLowerCase();
 
@@ -41,6 +49,13 @@ const Musiciel = () => {
     //   return;
     // }
     addCloud(nuageNameLowerCase);
+    const body = {
+      word: nuageNameLowerCase,
+      listchords,
+    };
+    const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', body);
+    console.log('response', response);
+    fetch('http://localhost/word_music_sheet');
     setHasAlreadyDrawn(true);
   };
 
