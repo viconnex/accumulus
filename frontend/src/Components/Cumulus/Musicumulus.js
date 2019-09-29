@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TweenLite, TweenMax, Linear, Power4 } from 'gsap/TweenMax';
+import { TweenLite, TweenMax } from 'gsap/TweenMax';
 import { random } from 'utils/helpers';
 import { Nuage } from './Nuage';
 import './style.css';
@@ -8,9 +8,15 @@ import './style.css';
 
 const chuteMax = window.innerHeight - 10;
 
-const Musicumulus = ({ nuageName, musicSheet, deriveMax }) => {
+const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax }) => {
   // reference to the DOM node
   var cumulus = null;
+
+  const [isArrived, arrive] = useState(false);
+  useEffect(() => {
+    if (isArrived) handleSkyLanding();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isArrived]);
 
   useEffect(() => {
     TweenLite.set(cumulus, {
@@ -21,6 +27,7 @@ const Musicumulus = ({ nuageName, musicSheet, deriveMax }) => {
     const blowUp = cumulus => () => {
       TweenMax.to(cumulus, 1, {
         y: -300,
+        onComplete: () => arrive(true),
       });
     };
 

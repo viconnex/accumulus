@@ -21,6 +21,8 @@ const chords = [
   { chordAltitude: chuteMax - 3 * verticalspace - cloudHeight, leftNote: 'Machicoulis', rightNote: 'Vitre' },
 ];
 
+let cloudId = 0;
+
 const Musiciel = () => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
   const [clouds, setClouds] = useState([]);
@@ -43,15 +45,25 @@ const Musiciel = () => {
     };
     const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', body);
     const sheet = await response.json();
-    addCloud({ name: nuageNameLowerCase, sheet, id: clouds.length });
-
+    addCloud({ name: nuageNameLowerCase, sheet, id: cloudId });
+    cloudId += 1;
     setHasAlreadyDrawn(true);
   };
 
+  const handleSkyLanding = cloudId => () => {
+    const l = clouds.filter(cloud => cloud.id !== cloudId);
+    setClouds(l);
+  };
   return (
     <div className="ciel">
       {clouds.map(cloud => (
-        <Musicumulus key={cloud.id} nuageName={cloud.name} musicSheet={cloud.sheet} deriveMax={deriveMax} />
+        <Musicumulus
+          key={cloud.id}
+          nuageName={cloud.name}
+          musicSheet={cloud.sheet}
+          deriveMax={deriveMax}
+          handleSkyLanding={handleSkyLanding(cloud.id)}
+        />
       ))}
       <AirGuitar chords={chords} />
       <div className="superficiel">

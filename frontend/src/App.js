@@ -8,10 +8,10 @@ function App() {
   return (
     <Router basename="/">
       <div className="App">
-        <header className="App-header">
-          <Route exact path="/cloud-nine" render={() => <Ciel cloud9 />} />
-          <Route exact path="/" component={() => <Musiciel />} />
-        </header>
+        {/* <header className="App-header"> */}
+        <Route exact path="/cloud-nine" render={() => <Ciel cloud9 />} />
+        <Route exact path="/" component={() => <Musiciel />} />
+        {/* </header> */}
       </div>
     </Router>
   );
