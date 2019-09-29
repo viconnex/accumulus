@@ -37,27 +37,22 @@ const Musiciel = () => {
     event.preventDefault();
     var nuageNameLowerCase = nuageName.split(' ')[0].toLocaleLowerCase();
 
-    // if (clouds.includes(nuageNameLowerCase)) {
-    //   setNuageName('');
-    //   return;
-    // }
     const body = {
       word: nuageNameLowerCase,
       chords,
     };
     const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', body);
     const sheet = await response.json();
-    console.log('sheet', sheet);
-    addCloud({ name: nuageNameLowerCase, sheet });
+    addCloud({ name: nuageNameLowerCase, sheet, id: clouds.length });
 
     setHasAlreadyDrawn(true);
   };
 
   return (
     <div className="ciel">
-      {clouds.map(cloud => {
-        return <Musicumulus key={cloud.name} nuageName={cloud.name} musicSheet={cloud.sheet} deriveMax={deriveMax} />;
-      })}
+      {clouds.map(cloud => (
+        <Musicumulus key={cloud.id} nuageName={cloud.name} musicSheet={cloud.sheet} deriveMax={deriveMax} />
+      ))}
       <AirGuitar chords={chords} />
       <div className="superficiel">
         <form onSubmit={dessineLeNuage} className="dessinage">
