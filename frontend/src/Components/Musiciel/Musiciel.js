@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import sockeIOClient from 'socket.io-client';
 
-import Textfield from '@material-ui/core/Textfield';
+import Textfield from '@material-ui/core/TextField';
 
-import { fetchRequest } from 'utils/helpers';
+import { fetchRequest } from '../../utils/helpers';
 import './style.css';
-import Musicumulus from 'Components/Cumulus/Musicumulus';
-import { AirGuitar } from 'Components/AirGuitar';
+import Musicumulus from '../Cumulus/Musicumulus';
+import { AirGuitar } from '../AirGuitar';
 import { API_GATEWAY_URL, API_GATEWAY_PATH } from 'utils/constants';
 
 const cloudBaseWidth = 100;

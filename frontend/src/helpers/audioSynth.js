@@ -13,7 +13,7 @@ const synths = {
         Q: 10,
         rolloff: -12,
       });
-      vol = new Tone.Volume(-24).chain(instance.filter);
+      instance.vol = new Tone.Volume(-24).chain(instance.filter);
       instance.lfo = new Tone.LFO(2, 100, 400);
       instance.lfo.connect(instance.filter.frequency);
 
@@ -22,7 +22,7 @@ const synths = {
         decay: 0.1,
         sustain: 0.3,
         release: 0.5,
-      }).connect(vol);
+      }).connect(instance.vol);
 
       instance.osci2 = new Tone.OmniOscillator({
         type: 'sawtooth',
