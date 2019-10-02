@@ -43,9 +43,23 @@ const Musiciel = () => {
       word: nuageNameLowerCase,
       chords,
     };
-    const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', body);
-    const sheet = await response.json();
-    addCloud({ name: nuageNameLowerCase, sheet, id: cloudId });
+    try {
+      const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', body);
+      const sheet = await response.json();
+      console.log(sheet);
+      addCloud({ name: nuageNameLowerCase, sheet, id: cloudId });
+    } catch {
+      addCloud({
+        name: nuageNameLowerCase,
+        id: cloudId,
+        sheet: chords.map(({ chordAltitude, leftNote, rightNote }) => ({
+          chordAltitude,
+          leftNote,
+          rightNote,
+          note: Math.random(),
+        })),
+      });
+    }
     cloudId += 1;
     setHasAlreadyDrawn(true);
   };
