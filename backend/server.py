@@ -20,51 +20,48 @@ def hello_name(name):
 def return_random_float():
     return str(0.2)
 
+
 @app.route('/similaritya', methods=['GET', 'POST'])
 def similarity():
     if request.method == 'POST':  #this block is only entered when the form is submitted
-        firstword = request.form.get('firstword')
-        secondword = request.form['secondword']
+        word1 = request.form.get('word1')
+        word2 = request.form['word2']
+        similarity_words = _similaritywords(word1, word2)
 
         return '''<h1>The firstword value is: {}</h1>
-                  <h1>The secondword value is: {}</h1>'''.format(firstword, secondword)
+                  <h1>The secondword value is: {}</h1>
+                  <h1>Similarity is: {}</h1>
+                  '''.format(word1, word2, similarity_words)
 
     return '''<form method="POST">
-                  Firstword: <input type="text" name="firstword"><br>
-                  Secondword: <input type="text" name="secondword"><br>
+                  Firstword: <input type="text" name="word1"><br>
+                  Secondword: <input type="text" name="word2"><br>
                   <input type="submit" value="Submit"><br>
               </form>'''
 
 
-@app.route('/jsonexample', methods=['POST']) #GET requests will be blocked
-def json_example():
-    req_data = request.get_json()
-    print(req_data)
-
-    language = req_data.get('language', "no")
-    print(language)
-    framework = req_data.get('framework', "no")
-    python_version = req_data.get('version_info', "no") #two keys are needed because of the nested object
-    example = req_data.get('examples', "no") #an index is needed because of the array
-    boolean_test = req_data.get('boolean_test', "no")
-
-    return '''
-           The language value is: {}
-           The framework value is: {}
-           The Python version is: {}
-           The item at index 0 in the example list is: {}
-           '''.format(language, framework, python_version, example, boolean_test)
+WORDEMBEDDER = None
 
 
-
-import random
-
-def distance(word1, word2):
+def _similaritywords(word1, word2):
     """todo"""
-    return random.randint(1, 101)
+    global WORDEMBEDDER
+    if WORDEMBEDDER is None:
+        from gensim.models import KeyedVectors
+        fname = "resources/cc.fr.300.vec"
+        # fname = resources/wiki.multi.fr.vec
+        limit = 10000
+        print("Loading word2Vec from fname: %s" % fname)
+        WORDEMBEDDER = KeyedVectors.load_word2vec_format(
+            fname, binary=False,
+            limit=limit)
+
+    assert word1 in WORDEMBEDDER
+    assert word1 in WORDEMBEDDER
+    return WORDEMBEDDER.similarity(word1, word2)
 
 
-def compute_location(similarity1, similarity2):
+def _compute_location(similarity1, similarity2):
     return similarity2 / (similarity1 + similarity2)
 
 
@@ -76,9 +73,9 @@ def similarity_word_listchords():
     word = req_data['word']
     list_chords = req_data['chords']
     for chords in list_chords:
-         similarity1 = distance(word, chords["leftNote"])
-         similarity2 = distance(word, chords["rightNote"])
-         chords["note"] = compute_location(similarity1, similarity2)
+         similarity1 = _similaritywords(word, chords["leftNote"])
+         similarity2 = _similaritywords(word, chords["rightNote"])
+         chords["note"] = _compute_location(similarity1, similarity2)
     return json.dumps(list_chords)
 
 
