@@ -2,6 +2,7 @@ import math
 
 
 WORDEMBEDDER = None
+T = 1/12
 
 
 def init_wordembedder(
@@ -32,7 +33,7 @@ def sigmoid(x):
 
 def compute_location(similarity1, similarity2):
     mean = similarity2 / (similarity1 + similarity2)
-    return sigmoid(mean)
+    return sigmoid((mean - 1/2)/T)
 
 
 def compute_similarity_word_listchords(word, list_chords):
