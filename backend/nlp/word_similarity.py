@@ -6,8 +6,8 @@ T = 1/12
 
 
 def init_wordembedder(
-        fname="../resources/cc.fr.300.vec",
-        limit=10000):
+        fname="resources/cc.fr.300.vec",
+        limit=100000):
     global WORDEMBEDDER
     from gensim.models import KeyedVectors
     print("Loading word2Vec from fname: %s" % fname)
@@ -61,22 +61,29 @@ def main():
     init_wordembedder(
         fname=args.fname,
         limit=args.limit)
-    word = "papa"
+
     list_chords = [
         {"leftNote": "méchant",
          "rightNote": "gentil"},
-        {"leftNote": "méchant",
-         "rightNote": "gentil"},
+        {"leftNote": "froid",
+         "rightNote": "chaud"},
         {"leftNote": "avare",
          "rightNote": "généreux"}
     ]
-    compute_similarity_word_listchords(word, list_chords)
-    print("list_chords: %s" % list_chords)
-    papamostsimilar = WORDEMBEDDER.most_similar("papa")
-    print("papamostsimilar: %s" % str(papamostsimilar))
+    words = ["papa","diable", "maison","argent", "chaise", "table",
+             "capitalisme",
+             "capitalise"]
+    for word in words:
+        try:
+            compute_similarity_word_listchords(word, list_chords)
+            print("list_chords: %s for word: %s" % (list_chords,word))
+        except:
+            print(word)
+    # papamostsimilar = WORDEMBEDDER.most_similar("papa")
+    # print("papamostsimilar: %s" % str(papamostsimilar))
     hommemostsimilar = WORDEMBEDDER.most_similar(
-        positive=["femme", "roi"],
-        negative=["reine"])
+        positive=["londres", "france"],
+        negative=["paris"])
     print("hommemostsimilar: %s" % hommemostsimilar)
 
 
