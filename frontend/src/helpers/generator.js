@@ -108,7 +108,7 @@ export const generateRandomSequence = key => {
       }, startAtTime);
     });
 
-  return makePiece(randomSequence).then(cleanUp => {
+  makePiece(randomSequence).then(cleanUp => {
     Tone.Transport.start();
 
     return cleanUp;
