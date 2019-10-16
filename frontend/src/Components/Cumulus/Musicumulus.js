@@ -4,16 +4,11 @@ import { random } from 'utils/helpers';
 import { Nuage } from './Nuage';
 import Tone from 'tone';
 import './style.css';
-
-const notes = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
-const getNote = (musicSheet, index) => {
-  return `${notes[Math.floor(musicSheet[index].note * notes.length)]}${index}`;
-};
-// TweenLite.defaultEase = Linear.easeNone;
+import { playNote } from '../../helpers/generator';
 
 const chuteMax = window.innerHeight - 10;
 
-const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax }) => {
+const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, pentaKey }) => {
   // reference to the DOM node
   var cumulus = null;
 
@@ -24,8 +19,6 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax }) => 
   }, [isArrived]);
 
   useEffect(() => {
-    const synth = new Tone.Synth().toMaster();
-
     TweenLite.set(cumulus, {
       x: musicSheet[0].note * deriveMax,
       y: chuteMax,
@@ -33,11 +26,11 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax }) => 
 
     const blowUp = (cumulus, note) => () => {
       TweenMax.to(cumulus, 1, {
-        y: -300,
-        onStart: () => synth.triggerAttack(note),
+        y: 0,
+        onStart: () => null, // playNote(note),
         onComplete: () => {
           arrive(true);
-          synth.triggerRelease();
+          // synth.triggerRelease();
         },
       });
     };
@@ -47,13 +40,17 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax }) => 
         x: musicSheet[index].note * deriveMax,
         y: musicSheet[index].chordAltitude,
         onStart: () => {
-          if (index > 0) synth.triggerAttack(getNote(musicSheet, index - 1));
+          if (index > 0) {
+            playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
+          }
         },
         onComplete: () => {
-          // synth.triggerRelease();
-
-          if (index < musicSheet.length - 1) twinTo(index + 1, cumulus)();
-          else blowUp(cumulus, getNote(musicSheet, index))();
+          if (index < musicSheet.length - 1) {
+            twinTo(index + 1, cumulus)();
+          } else {
+            playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
+            blowUp(cumulus, null)();
+          }
         },
         // ease: Power4.easeOut,
       });
