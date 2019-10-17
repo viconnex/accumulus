@@ -16,24 +16,24 @@ const LeftNote = styled.div`
   left: 30px;
 `;
 
-const CloudChord = ({ chord }) => {
+const CloudChord = ({ chord, baseWidth }) => {
   return (
     <React.Fragment>
       <LeftNote chordAltitude={chord.chordAltitude}>
-        <Nuage nuageName={chord.leftNote} baseWidth="150" />
+        <Nuage nuageName={chord.leftNote} baseWidth={baseWidth} />
       </LeftNote>
       <RightNote chordAltitude={chord.chordAltitude}>
-        <Nuage nuageName={chord.rightNote} baseWidth="150" />
+        <Nuage nuageName={chord.rightNote} baseWidth={baseWidth} />
       </RightNote>
     </React.Fragment>
   );
 };
 
-const AirGuitar = ({ chords }) => {
+const AirGuitar = ({ chords, baseWidth }) => {
   return (
     <div>
       {chords.map(chord => {
-        return <CloudChord key={chord.chordAltitude} chord={chord} />;
+        return <CloudChord key={chord.chordAltitude} chord={chord} baseWidth={baseWidth} />;
       })}
     </div>
   );
