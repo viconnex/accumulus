@@ -7,12 +7,14 @@ T = 1/12
 
 def init_wordembedder(
         fname="resources/cc.fr.300.vec",
+        binary=False,
         limit=100000):
     global WORDEMBEDDER
     from gensim.models import KeyedVectors
     print("Loading word2Vec from fname: %s" % fname)
     WORDEMBEDDER = KeyedVectors.load_word2vec_format(
-        fname, binary=False,
+        fname,
+        binary=binary,
         limit=limit)
 
 
@@ -22,8 +24,10 @@ def similarity(word1, word2):
     if WORDEMBEDDER is None:
         init_wordembedder()
 
-    assert word1 in WORDEMBEDDER
-    assert word1 in WORDEMBEDDER
+    if word1 not in WORDEMBEDDER:
+        return 0
+    if word2 not in WORDEMBEDDER:
+        return 0
     return WORDEMBEDDER.similarity(word1, word2)
 
 
@@ -32,8 +36,8 @@ def sigmoid(x):
 
 
 def compute_location(similarity1, similarity2):
-    mean = similarity2 / (similarity1 + similarity2)
-    return sigmoid((mean - 1/2)/T)
+    diffsim = similarity2 - similarity1
+    return sigmoid(diffsim/T)
 
 
 def compute_similarity_word_listchords(word, list_chords):
@@ -51,6 +55,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description="Do something.")
     parser.add_argument('--fname', type=str, default="../resources/cc.fr.300.vec")
     parser.add_argument('--limit', type=float, default=100000)
+    parser.add_argument('--binary', action="store_true", default=False)
     return parser
 
 
@@ -60,6 +65,7 @@ def main():
 
     init_wordembedder(
         fname=args.fname,
+        binary=args.binary,
         limit=args.limit)
 
     list_chords = [
@@ -70,7 +76,12 @@ def main():
         {"leftNote": "avare",
          "rightNote": "généreux"}
     ]
-    words = ["papa","diable", "maison","argent", "chaise", "table",
+    words = ["papa",
+             "diable",
+             "maison",
+             "argent",
+             "chaise",
+             "table",
              "capitalisme",
              "capitalise"]
     for word in words:
