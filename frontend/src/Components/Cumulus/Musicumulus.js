@@ -6,8 +6,6 @@ import Tone from 'tone';
 import './style.css';
 import { playNote, addPattern, patterns } from '../../helpers/generator';
 
-const chuteMax = window.innerHeight - 10;
-
 const ableton = ['Drums2', 'Bass1', 'Chords3', 'Melodies4'];
 
 const Musicumulus = ({ handleSkyLanding, baseWidth, nuageName, musicSheet, deriveMax, initialPos, pentaKey }) => {
