@@ -43,7 +43,6 @@ def similarity():
               </form>'''
 
 
-
 @app.route('/word_music_sheet', methods=['POST']) #GET requests will be blocked
 def similarity_word_listchords():
     req_data = request.get_json()

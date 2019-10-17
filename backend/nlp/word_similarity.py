@@ -1,5 +1,9 @@
 import math
 import random
+try:
+    import wrapper_gensim
+except:
+    from nlp import wrapper_gensim
 
 WORDEMBEDDER = None
 
@@ -8,20 +12,26 @@ def init_wordembedder(
         fname="resources/cc.fr.300.vec",
         limit=100000):
     global WORDEMBEDDER
-    from gensim.models import KeyedVectors
+    from gensim.models.keyedvectors import KeyedVectors
     binary = fname.endswith(".bin")
     print("Loading word2Vec from fname: %s" % fname)
-    WORDEMBEDDER = KeyedVectors.load_word2vec_format(
-        fname,
+    WORDEMBEDDER = wrapper_gensim._load_word2vec_format(
+        KeyedVectors,
+        fname=fname,
         binary=binary,
         limit=limit)
+    # WORDEMBEDDER = KeyedVectors.load_word2vec_format(
+    #     fname=fname,
+    #     binary=binary,
+    #     limit=limit)
+    return WORDEMBEDDER
 
 
 def load_list_chords(chordsname, nb_chords=4, shuffle=True):
     list_chords = []
     with open(chordsname, "r") as reader:
         for line in reader:
-            line = line.strip()
+            line = line.strip().lower()
             chord = {
                 "leftNote": line.split(",")[0],
                 "rightNote": line.split(",")[1]
@@ -64,6 +74,7 @@ def compute_location(similarity1, similarity2, temperature=1/12):
 
 
 def compute_similarity_word_listchords(word, list_chords, temperature=1/12):
+    word = word.lower()
     for chords in list_chords:
         chords["leftSim"] = similarity(word, chords["leftNote"])
         chords["rightSim"] = similarity(word, chords["rightNote"])
@@ -109,8 +120,8 @@ def main():
                  "chair",
                  "table",
                  "capitalism"]
-        positive = ["London", "France"]
-        negative = ["Paris"]
+        positive = ["london", "france"]
+        negative = ["paris"]
         temperature = 1
 
     init_wordembedder(
