@@ -1,5 +1,6 @@
 import math
 import random
+import os
 try:
     import wrapper_gensim
 except:
@@ -76,8 +77,8 @@ def compute_location(similarity1, similarity2, temperature=1/12):
 def compute_similarity_word_listchords(word, list_chords, temperature=1/12):
     word = word.lower()
     for chords in list_chords:
-        chords["leftSim"] = similarity(word, chords["leftNote"])
-        chords["rightSim"] = similarity(word, chords["rightNote"])
+        chords["leftSim"] = similarity(word, chords["leftNote"].lower())
+        chords["rightSim"] = similarity(word, chords["rightNote"].lower())
         chords["note"] = compute_location(
             chords["leftSim"],
             chords["rightSim"],
@@ -89,7 +90,8 @@ def get_parser():
     import argparse
     parser = argparse.ArgumentParser(description="Do something.")
     parser.add_argument('--lang', type=str, default="fr")
-    parser.add_argument('--limit', type=float, default=1000000)
+    parser.add_argument('--limit', type=float, default=100000)
+    parser.add_argument('--action', type=str, default="sim")
     return parser
 
 
@@ -119,30 +121,40 @@ def main():
                  "silver",
                  "chair",
                  "table",
+                 "woman",
                  "capitalism"]
         positive = ["london", "france"]
         negative = ["paris"]
         temperature = 1
 
-    init_wordembedder(
+    wembedding = init_wordembedder(
         fname=fname,
         limit=args.limit)
 
-    list_chords = load_list_chords(chordsname, nb_chords=4, shuffle=True)
+    if args.action == "sim":
+        list_chords = load_list_chords(chordsname, nb_chords=4, shuffle=False)
 
-    for word in words:
-        compute_similarity_word_listchords(
-            word, list_chords,
-            temperature=temperature)
-        print("list_chords: %s for word: %s" % (list_chords, word))
+        for word in words:
+            print("== word: %s" % word)
+            compute_similarity_word_listchords(
+                word, list_chords,
+                temperature=temperature)
+            for chord in list_chords:
+                print(chord)
 
-    posneg = WORDEMBEDDER.most_similar(
-        positive=positive,
-        negative=negative)
-    print("posneg: %s positive: %s negative: %s" % (
-        posneg,
-        positive,
-        negative))
+        posneg = WORDEMBEDDER.most_similar(
+            positive=positive,
+            negative=negative)
+        print("posneg: %s positive: %s negative: %s" % (
+            posneg,
+            positive,
+            negative))
+    elif args.action == "tobin":
+        assert args.limit == 0
+        newfname = os.path.splitext(fname)[0]+'.bin'
+        wembedding.save_word2vec_format(newfname, binary=True)
+    else:
+        raise ValueError(args.action)
 
 
 if __name__ == "__main__":
