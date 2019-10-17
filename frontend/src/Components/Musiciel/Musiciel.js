@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import sockeIOClient from 'socket.io-client';
 
 import Textfield from '@material-ui/core/Textfield';
@@ -7,16 +7,15 @@ import { fetchRequest } from 'utils/helpers';
 import './style.css';
 import Musicumulus from 'Components/Cumulus/Musicumulus';
 import { AirGuitar } from 'Components/AirGuitar';
-import WanderingCumulus from 'Components/Cumulus/WanderingCumulus';
 import { API_GATEWAY_URL, API_GATEWAY_PATH } from 'utils/constants';
 
 const cloudBaseWidth = 100;
 const cloudHeight = cloudBaseWidth / 3 + (cloudBaseWidth * 35) / 150;
-const musicSheetHeight = (window.innerHeight * 2) / 3;
-const wanderingHeight = window.innerHeight / 3;
+const wanderingScaleFactor = 0 / 3;
+const musicSheetHeight = window.innerHeight * (1 - wanderingScaleFactor);
+// const wanderingHeight = window.innerHeight * wanderingScaleFactor;
 const deriveMax = window.innerWidth - cloudBaseWidth;
-
-const verticalspace = 1.8 * cloudHeight;
+const verticalspace = 2.5 * cloudHeight;
 
 const chords = [
   { chordAltitude: musicSheetHeight - cloudHeight, leftNote: 'Ricochet', rightNote: 'Simulacre' },
@@ -34,10 +33,8 @@ const createCloud = (id, name, sheet) => {
 };
 
 const Musiciel = () => {
-  // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
   const [cloudId, setCloudId] = useState(0);
   const [clouds, setClouds] = useState([]);
-  const [musicumulus, setMusicCloud] = useState(null);
   const [nuageName, setNuageName] = useState('');
   const [hasAlreadyDrawn, setHasAlreadyDrawn] = useState(false);
 
@@ -97,26 +94,18 @@ const Musiciel = () => {
   return (
     <div className="ciel">
       {clouds.map(cloud => (
-        <WanderingCumulus
+        <Musicumulus
           key={cloud.id}
           cloudBaseWidth={cloudBaseWidth}
           cloudHeight={cloudHeight}
           deriveMax={deriveMax}
           nuageName={cloud.name}
           musicSheet={cloud.sheet}
-          meanHeight={musicSheetHeight + wanderingHeight / 2}
-          wanderingHeight={wanderingHeight}
+          // meanHeight={musicSheetHeight + wanderingHeight / 2}
+          // wanderingHeight={wanderingHeight}
           handleSkyLanding={handleSkyLanding(cloud.id)}
         />
       ))}
-      {musicumulus && (
-        <Musicumulus
-          nuageName={musicumulus.name}
-          musicSheet={musicumulus.sheet}
-          deriveMax={deriveMax}
-          handleSkyLanding={handleSkyLanding(musicumulus.id)}
-        />
-      )}
       <AirGuitar chords={chords} baseWidth={Math.round(cloudBaseWidth)} />
       <div className="superficiel">
         <form onSubmit={dessineLeNuage} className="dessinage">
