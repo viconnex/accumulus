@@ -10,8 +10,8 @@ WORDEMBEDDER = None
 
 
 def init_wordembedder(
-        fname="resources/cc.fr.300.vec",
-        limit=100000):
+        fname="resources/cc.fr.300.bin",
+        limit=1000000):
     global WORDEMBEDDER
     from gensim.models.keyedvectors import KeyedVectors
     binary = fname.endswith(".bin")
@@ -101,6 +101,8 @@ def main():
 
     if args.lang == "fr":
         fname = "../resources/cc.fr.300.vec"
+        if args.action != "tobin":
+            fname = os.path.splitext(fname)[0]+'.bin'
         chordsname = "../resources/chords/french.csv"
         words = ["papa",
                  "diable",
