@@ -1,1 +1,2 @@
-backend/resources/*
+backend/resources/*.bin
+backend/resources/*.vec
