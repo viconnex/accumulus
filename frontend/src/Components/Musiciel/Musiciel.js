@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import sockeIOClient from 'socket.io-client';
+import Tone from 'tone';
+import styled from 'styled-components';
 
-import Textfield from '@material-ui/core/Textfield';
+import Textfield from '@material-ui/core/TextField';
 
-import { fetchRequest } from 'utils/helpers';
+import { fetchRequest } from '../../utils/helpers';
 import './style.css';
-import Musicumulus from 'Components/Cumulus/Musicumulus';
-import { AirGuitar } from 'Components/AirGuitar';
+import Musicumulus from '../Cumulus/Musicumulus';
+import { AirGuitar } from '../AirGuitar';
 import { API_GATEWAY_URL, API_GATEWAY_PATH } from 'utils/constants';
+import makePiece, { generateRandomSequence } from '../../helpers/generator';
+import { pentaMinor } from '../../helpers/generator';
 
 const cloudBaseWidth = 100;
 const cloudHeight = cloudBaseWidth / 3 + (cloudBaseWidth * 35) / 150;
@@ -35,9 +39,9 @@ const createCloud = (id, name, sheet) => {
 const Musiciel = () => {
   const [cloudId, setCloudId] = useState(0);
   const [clouds, setClouds] = useState([]);
+  const [pentaKey, setPentaKey] = useState('F');
   const [nuageName, setNuageName] = useState('');
   const [hasAlreadyDrawn, setHasAlreadyDrawn] = useState(false);
-
   const createRandomSheet = () => {
     return chords.map(({ chordAltitude, leftNote, rightNote }) => ({
       chordAltitude,
@@ -46,9 +50,21 @@ const Musiciel = () => {
       note: Math.random(),
     }));
   };
+  React.useEffect(() => {
+    makePiece(pentaMinor[pentaKey]).then(cleanUp => {
+      Tone.Transport.start();
+    });
+  }, [pentaKey]);
 
-  const addCloud = cloud => {
-    const l = [...clouds, cloud];
+  const switchKey = key =>
+    new Promise(resolve => {
+      Tone.Transport.stop();
+      Tone.Transport.cancel();
+      resolve();
+    }).then(() => setPentaKey(key));
+
+  const addCloud = nuageName => {
+    const l = [...clouds, nuageName];
     setClouds(l);
     setNuageName('');
   };
@@ -95,6 +111,7 @@ const Musiciel = () => {
     <div className="ciel">
       {clouds.map(cloud => (
         <Musicumulus
+          pentaKey={pentaKey}
           key={cloud.id}
           cloudBaseWidth={cloudBaseWidth}
           cloudHeight={cloudHeight}
@@ -110,16 +127,33 @@ const Musiciel = () => {
       <div className="superficiel">
         <form onSubmit={dessineLeNuage} className="dessinage">
           <Textfield
+            style={{ color: 'lightgray' }}
             onChange={event => {
               setNuageName(event.target.value);
             }}
             value={nuageName}
             placeholder={clouds.length === 0 && !hasAlreadyDrawn ? 'Nommage' : null}
           />
+          <div className="ambiancage">
+            {Object.keys(pentaMinor).map(key => (
+              <KeyButton selected={key === pentaKey} type="button" onClick={() => switchKey(key)}>
+                {key}
+              </KeyButton>
+            ))}
+          </div>
         </form>
       </div>
     </div>
   );
 };
+
+const KeyButton = styled.button`
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: lightgray;
+  text-decoration: ${props => (props.selected ? 'underline' : 'none')};
+`;
 
 export default Musiciel;

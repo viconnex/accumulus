@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { TweenLite, TweenMax } from 'gsap/TweenMax';
 import { random } from 'utils/helpers';
 import { Nuage } from './Nuage';
+import Tone from 'tone';
 import './style.css';
-
-// TweenLite.defaultEase = Linear.easeNone;
+import { playNote } from '../../helpers/generator';
 
 const chuteMax = window.innerHeight - 10;
 
-const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax }) => {
+const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, pentaKey }) => {
   // reference to the DOM node
   var cumulus = null;
 
@@ -24,18 +24,34 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax }) => 
       y: chuteMax,
     });
 
-    const blowUp = cumulus => () => {
+    const blowUp = (cumulus, note) => () => {
       TweenMax.to(cumulus, 1, {
-        y: -300,
-        onComplete: () => arrive(true),
+        y: 0,
+        onStart: () => null, // playNote(note),
+        onComplete: () => {
+          arrive(true);
+          // synth.triggerRelease();
+        },
       });
     };
 
     const twinTo = (index, cumulus) => () => {
-      TweenMax.to(cumulus, random(0.4, 2), {
+      TweenMax.to(cumulus, random(1, 3), {
         x: musicSheet[index].note * deriveMax,
         y: musicSheet[index].chordAltitude,
-        onComplete: index < musicSheet.length - 1 ? twinTo(index + 1, cumulus) : blowUp(cumulus),
+        onStart: () => {
+          if (index > 0) {
+            playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
+          }
+        },
+        onComplete: () => {
+          if (index < musicSheet.length - 1) {
+            twinTo(index + 1, cumulus)();
+          } else {
+            playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
+            blowUp(cumulus, null)();
+          }
+        },
         // ease: Power4.easeOut,
       });
     };

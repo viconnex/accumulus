@@ -7,8 +7,22 @@
 
 .dessinage {
   position: absolute;
-  top: 5px;
-  left: 10px;
+  display: flex;
+  flex-direction: row;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 0.5em;
+}
+
+.MuiInputBase-input {
+  color: lightgray !important;
+}
+
+.ambiancage {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
 }
 
 .upload {
