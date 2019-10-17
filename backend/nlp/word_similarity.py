@@ -62,7 +62,7 @@ def similarity(word1, word2):
         return 0
     if word2 not in WORDEMBEDDER:
         return 0
-    return WORDEMBEDDER.similarity(word1, word2)
+    return float(WORDEMBEDDER.similarity(word1, word2))
 
 
 def sigmoid(x):
@@ -71,7 +71,7 @@ def sigmoid(x):
 
 def compute_location(similarity1, similarity2, temperature=1/12):
     diffsim = similarity2 - similarity1
-    return sigmoid(diffsim/temperature)
+    return float(sigmoid(diffsim/temperature))
 
 
 def compute_similarity_word_listchords(word, list_chords, temperature=1/12):
