@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import sockeIOClient from 'socket.io-client';
 
 import Textfield from '@material-ui/core/Textfield';
 
@@ -7,6 +8,7 @@ import './style.css';
 import Musicumulus from 'Components/Cumulus/Musicumulus';
 import { AirGuitar } from 'Components/AirGuitar';
 import WanderingCumulus from 'Components/Cumulus/WanderingCumulus';
+import { API_GATEWAY_URL, API_GATEWAY_PATH } from 'utils/constants';
 
 const cloudBaseWidth = 100;
 const cloudHeight = cloudBaseWidth / 3 + (cloudBaseWidth * 35) / 150;
@@ -23,20 +25,51 @@ const chords = [
   { chordAltitude: musicSheetHeight - 3 * verticalspace - cloudHeight, leftNote: 'Machicoulis', rightNote: 'Vitre' },
 ];
 
-let cloudId = 0;
+const createCloud = (id, name, sheet) => {
+  return {
+    id,
+    name,
+    sheet,
+  };
+};
 
 const Musiciel = () => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
+  const [cloudId, setCloudId] = useState(0);
   const [clouds, setClouds] = useState([]);
   const [musicumulus, setMusicCloud] = useState(null);
   const [nuageName, setNuageName] = useState('');
   const [hasAlreadyDrawn, setHasAlreadyDrawn] = useState(false);
 
-  const addCloud = nuageName => {
-    const l = [...clouds, nuageName];
+  const createRandomSheet = () => {
+    return chords.map(({ chordAltitude, leftNote, rightNote }) => ({
+      chordAltitude,
+      leftNote,
+      rightNote,
+      note: Math.random(),
+    }));
+  };
+
+  const addCloud = cloud => {
+    const l = [...clouds, cloud];
     setClouds(l);
     setNuageName('');
   };
+
+  useEffect(() => {
+    const socket = sockeIOClient(API_GATEWAY_URL, { path: API_GATEWAY_PATH });
+    socket.on('upload', upcomingClouds => {
+      const l = [
+        ...clouds,
+        ...upcomingClouds.map((cloudName, index) => createCloud(cloudId + index, cloudName, createRandomSheet())),
+      ];
+      setClouds(l);
+      setCloudId(cloudId + upcomingClouds.length);
+    });
+    return () => {
+      socket.close();
+    };
+  }, [clouds, cloudId]);
 
   const dessineLeNuage = async event => {
     event.preventDefault();
@@ -49,21 +82,12 @@ const Musiciel = () => {
     try {
       const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', body);
       const sheet = await response.json();
-      addCloud({ name: nuageNameLowerCase, sheet, id: cloudId });
+      addCloud(createCloud(cloudId, nuageNameLowerCase, sheet));
     } catch {
-      addCloud({
-        name: nuageNameLowerCase,
-        id: cloudId,
-        sheet: chords.map(({ chordAltitude, leftNote, rightNote }) => ({
-          chordAltitude,
-          leftNote,
-          rightNote,
-          note: Math.random(),
-        })),
-      });
+      addCloud(createCloud(cloudId, nuageNameLowerCase, createRandomSheet()));
     }
-    cloudId += 1;
     setHasAlreadyDrawn(true);
+    setCloudId(cloudId + 1);
   };
 
   const handleSkyLanding = cloudId => () => {
