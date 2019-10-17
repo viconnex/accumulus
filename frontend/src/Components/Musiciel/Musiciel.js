@@ -43,6 +43,10 @@ const createCloud = (id, name, sheet, initialPos, baseWidth) => {
   };
 };
 
+const initialPos = sheet => {
+  return { x: sheet[0].note * deriveMax, y: chuteMax };
+};
+
 const Musiciel = ({ location: { search } }) => {
   const [cloudId, setCloudId] = useState(0);
   const [clouds, setClouds] = useState([]);
@@ -59,8 +63,8 @@ const Musiciel = ({ location: { search } }) => {
     }));
   };
 
-  const urlParam = new URLSearchParams(search);
-  console.log(urlParam.get('all'));
+  // const urlParam = new URLSearchParams(search);
+  // console.log(urlParam.get('all'));
   React.useEffect(() => {
     /*makePiece(pentaMinor[pentaKey]).then(cleanUp => {
       Tone.Transport.start();
@@ -91,12 +95,28 @@ const Musiciel = ({ location: { search } }) => {
     setClouds(l);
   };
 
+  // receive clouds from other skies
   useEffect(() => {
     const socket = sockeIOClient(API_GATEWAY_URL, { path: API_GATEWAY_PATH });
     socket.on('upload', upcomingClouds => {
+      if (upcomingClouds.length === 0) return;
+
+      let musicloudOffset = 0;
+      if (musicloud === null) {
+        const newMusicloudName = upcomingClouds.shift();
+        const sheet = createRandomSheet();
+        const baseWidth = Math.max(Math.round(random(80, 160)), nuageName.length * 8);
+        setMusicloud(createCloud(cloudId, newMusicloudName, sheet, initialPos(sheet), baseWidth));
+        musicloudOffset += 1;
+      }
+
       const l = [
         ...clouds,
-        ...upcomingClouds.map((cloudName, index) => createCloud(cloudId + index, cloudName, createRandomSheet())),
+        ...upcomingClouds.map((cloudName, index) => {
+          const sheet = createRandomSheet();
+          const baseWidth = Math.max(Math.round(random(80, 160)), nuageName.length * 8);
+          return createCloud(cloudId + musicloudOffset + index, cloudName, sheet, initialPos(sheet), baseWidth);
+        }),
       ];
       setClouds(l);
       setCloudId(cloudId + upcomingClouds.length);
