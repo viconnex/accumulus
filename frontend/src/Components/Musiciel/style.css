@@ -1,0 +1,30 @@
+.ciel {
+  position: absolute;
+  top: 0;
+  display: flex;
+  width: 100%;
+}
+
+.dessinage {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  top: 0;
+  left: 0;
+  right: 0;
+  padding: 0 0.5em;
+}
+
+.MuiInputBase-input {
+  color: lightgray !important;
+}
+
+.ambiancage {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+}
+
+.upload {
+  animation: rotate 1s linear infinite;
+}
