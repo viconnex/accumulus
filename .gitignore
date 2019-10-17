@@ -1,3 +1,5 @@
 backend/resources/*.bin
 backend/resources/*.vec
 *pyc
+
+.idea
