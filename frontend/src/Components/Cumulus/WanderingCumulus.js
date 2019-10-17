@@ -9,8 +9,9 @@ import './style.css';
 const twoPi = Math.PI * 2;
 
 const WanderingCumulus = ({
-  handleSkyLanding,
+  cloudId,
   nuageName,
+  baseWidth,
   cloudBaseWidth,
   cloudHeight,
   deriveMax,
@@ -22,11 +23,7 @@ const WanderingCumulus = ({
   const [isVisibleX, setIsVisibleX] = useState(false);
   const [isVisibleY, setIsVisibleY] = useState(false);
 
-  const [isArrived, arrive] = useState(false);
-  useEffect(() => {
-    if (isArrived) handleSkyLanding();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isArrived]);
+  // const [isArrived, arrive] = useState(false);
 
   useEffect(() => {
     const xradius = random(1) < 0.35 ? random(deriveMax / 3, deriveMax / 2) : random(deriveMax / 6, deriveMax / 3);
@@ -52,7 +49,9 @@ const WanderingCumulus = ({
           return Math.cos(x) * xradius + xdecalage;
         },
       },
-      onStart: () => setIsVisibleX(true),
+      onStart: () => {
+        setIsVisibleX(true);
+      },
     });
 
     TweenMax.to(cumulus, yspeed, {
@@ -67,10 +66,13 @@ const WanderingCumulus = ({
     });
   }, [cumulus]);
 
-  const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
-
   return (
-    <div ref={div => (cumulus = div)} className="cumulus" style={{ opacity: isVisibleX && isVisibleY ? 1 : 0 }}>
+    <div
+      id={cloudId}
+      ref={div => (cumulus = div)}
+      className="cumulus"
+      style={{ opacity: isVisibleX && isVisibleY ? 1 : 0 }}
+    >
       <Nuage nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );

@@ -10,7 +10,7 @@ const chuteMax = window.innerHeight - 10;
 
 const ableton = ['Drums2', 'Bass1', 'Chords3', 'Melodies4'];
 
-const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, pentaKey }) => {
+const Musicumulus = ({ handleSkyLanding, baseWidth, nuageName, musicSheet, deriveMax, initialPos, pentaKey }) => {
   // reference to the DOM node
   var cumulus = null;
 
@@ -22,8 +22,8 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, penta
 
   useEffect(() => {
     TweenLite.set(cumulus, {
-      x: musicSheet[0].note * deriveMax,
-      y: chuteMax,
+      x: initialPos.x,
+      y: initialPos.y,
     });
 
     const blowUp = (cumulus, note) => () => {
@@ -71,8 +71,6 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, penta
 
     twinTo(0, cumulus)();
   }, [cumulus]);
-
-  const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
 
   const cleanUp = () => {};
 
