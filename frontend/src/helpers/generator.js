@@ -41,6 +41,21 @@ for (let n in pianoNotes) {
   }
 }
 
+const patternBuffers = {};
+const patternPlayers = {};
+export const patterns = ['Drums', 'Bass', 'Chords', 'Melodies'];
+for (let p of patterns) {
+  for (let i = 1; i < 5; i++) {
+    patternBuffers[`${p}${i}`] = new Tone.Buffer(require('../assets/patterns/' + p + i + '.ogg'));
+  }
+}
+
+for (let p of patterns) {
+  for (let i = 1; i < 5; i++) {
+    patternPlayers[`${p}${i}`] = new Tone.Player(patternBuffers[`${p}${i}`]).toMaster();
+  }
+}
+
 const getBuffers = (samplesByNote, opts = {}) =>
   new Promise(resolve => {
     const buffers = new Tone.Buffers(samplesByNote, () => resolve(buffers));
@@ -86,7 +101,7 @@ const makePiece = sequence => {
 };
 
 export const generateRandomSequence = key => {
-  console.log(key, pentaMinor)
+  console.log(key, pentaMinor);
   const randomSequence = Array.from(new Array(6)).map(
     _ => pentaMinor[key][Math.floor(Math.random() * pentaMinor[key].length)],
   );
@@ -118,6 +133,32 @@ export const generateRandomSequence = key => {
 export function playNote(indice, key = 'F') {
   const note = pentaMinor[key][indice];
   players[note].start();
+}
+
+export function addPattern(indice, pattern) {
+  /*a
+  *
+  * Tone.Transport.schedule(function play(time) {
+    patternPlayers[pattern].start(0);
+    console.log(time, patternBuffers[pattern].duration)
+    Tone.Transport.schedule(play, patternBuffers[pattern].duration);
+  }, 0);
+
+  Tone.Transport.toggle()
+  * */
+
+
+  Tone.Transport.bpm.value = 200;
+  return new Promise((resolve, reject) => {
+    Tone.Transport.pause();
+    const loop = new Tone.Loop(function(time) {
+      patternPlayers[pattern].start(time);
+      resolve();
+    }, patternBuffers[pattern].duration).start(0);
+
+    // Tone.Transport.syncSignal();
+    Tone.Transport.toggle();
+  });
 }
 
 export default makePiece;

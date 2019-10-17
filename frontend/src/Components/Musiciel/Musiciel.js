@@ -12,6 +12,7 @@ import { AirGuitar } from '../AirGuitar';
 import { API_GATEWAY_URL, API_GATEWAY_PATH } from 'utils/constants';
 import makePiece, { generateRandomSequence } from '../../helpers/generator';
 import { pentaMinor } from '../../helpers/generator';
+import { addPattern } from '../../helpers/generator';
 
 const cloudBaseWidth = 100;
 const cloudHeight = cloudBaseWidth / 3 + (cloudBaseWidth * 35) / 150;
@@ -36,7 +37,7 @@ const createCloud = (id, name, sheet) => {
   };
 };
 
-const Musiciel = () => {
+const Musiciel = ({ location: { search } }) => {
   const [cloudId, setCloudId] = useState(0);
   const [clouds, setClouds] = useState([]);
   const [pentaKey, setPentaKey] = useState('F');
@@ -50,10 +51,25 @@ const Musiciel = () => {
       note: Math.random(),
     }));
   };
+
+  const urlParam = new URLSearchParams(search);
+  console.log(urlParam.get('all'));
   React.useEffect(() => {
-    makePiece(pentaMinor[pentaKey]).then(cleanUp => {
+    /*makePiece(pentaMinor[pentaKey]).then(cleanUp => {
       Tone.Transport.start();
-    });
+    });*/
+    const pattern = `Drums${Math.ceil(Math.random() * 4)}`;
+    const bass = `Bass${Math.ceil(Math.random() * 4)}`;
+    const chord = `Chords${Math.ceil(Math.random() * 4)}`;
+    const melody = `Melodies${Math.ceil(Math.random() * 4)}`;
+
+    // console.log('add pattern');
+    // addPattern(null, pattern);
+    // addPattern(null, bass);
+    // addPattern(null, chord);
+    // addPattern(null, melody);
+
+    // Tone.Transport.start();
   }, [pentaKey]);
 
   const switchKey = key =>

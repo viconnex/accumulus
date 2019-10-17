@@ -4,9 +4,11 @@ import { random } from 'utils/helpers';
 import { Nuage } from './Nuage';
 import Tone from 'tone';
 import './style.css';
-import { playNote } from '../../helpers/generator';
+import { playNote, addPattern, patterns } from '../../helpers/generator';
 
 const chuteMax = window.innerHeight - 10;
+
+const ableton = ['Drums2', 'Bass1', 'Chords3', 'Melodies4'];
 
 const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, pentaKey }) => {
   // reference to the DOM node
@@ -29,7 +31,13 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, penta
         y: 0,
         onStart: () => null, // playNote(note),
         onComplete: () => {
-          arrive(true);
+          setTimeout(() => {
+            arrive(true);
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+          }, 10000);
+          // Tone.Transport.stop();
+          // Tone.Transport.cancel();
           // synth.triggerRelease();
         },
       });
@@ -41,15 +49,20 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, penta
         y: musicSheet[index].chordAltitude,
         onStart: () => {
           if (index > 0) {
-            playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
+            // playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
           }
         },
         onComplete: () => {
           if (index < musicSheet.length - 1) {
-            twinTo(index + 1, cumulus)();
+            addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 4)}`).then(() => {
+              twinTo(index + 1, cumulus)();
+            });
           } else {
-            playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
-            blowUp(cumulus, null)();
+            // playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
+            // addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 4)}`);
+            addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 4)}`).then(() => {
+              blowUp(cumulus, null)();
+            });
           }
         },
         // ease: Power4.easeOut,
@@ -60,6 +73,8 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, penta
   }, [cumulus]);
 
   const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
+
+  const cleanUp = () => {};
 
   return (
     <div ref={div => (cumulus = div)} className="cumulus">
