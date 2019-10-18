@@ -1,6 +1,7 @@
 import math
 import random
 import os
+import time
 try:
     import wrapper_gensim
 except:
@@ -11,8 +12,12 @@ WORDEMBEDDER = None
 
 def init_wordembedder(
         fname="resources/cc.fr.300.bin",
-        limit=1000000):
+        limit=100000):
     global WORDEMBEDDER
+    if WORDEMBEDDER is not None:
+        print("Do not reload WORDEMBEDDER: %s", WORDEMBEDDER)
+        return WORDEMBEDDER
+
     from gensim.models.keyedvectors import KeyedVectors
     binary = fname.endswith(".bin")
     print("Loading word2Vec from fname: %s" % fname)
@@ -57,13 +62,16 @@ def similarity(word1, word2):
     """todo"""
     global WORDEMBEDDER
     if WORDEMBEDDER is None:
+        # print("WORDEMBEDDER still none, sleep 4")
+        # time.sleep(4)
+        # return similarity(word1, word2)
         init_wordembedder()
 
     if word1 not in WORDEMBEDDER:
         return 0
     if word2 not in WORDEMBEDDER:
         return 0
-    return WORDEMBEDDER.similarity(word1, word2)
+    return float(WORDEMBEDDER.similarity(word1, word2))
 
 
 def sigmoid(x):
@@ -72,7 +80,7 @@ def sigmoid(x):
 
 def compute_location(similarity1, similarity2, temperature=1/12):
     diffsim = similarity2 - similarity1
-    return sigmoid(diffsim/temperature)
+    return float(sigmoid(diffsim/temperature))
 
 
 def compute_similarity_word_listchords(word, list_chords, temperature=1/12):
@@ -91,7 +99,7 @@ def get_parser():
     import argparse
     parser = argparse.ArgumentParser(description="Do something.")
     parser.add_argument('--lang', type=str, default="fr")
-    parser.add_argument('--limit', type=float, default=100000)
+    parser.add_argument('--limit', type=int, default=100000)
     parser.add_argument('--action', type=str, default="sim")
     return parser
 
@@ -135,6 +143,11 @@ def main():
         limit=args.limit)
 
     if args.action == "sim":
+        for char in ["d", "a", "b", "c"]:
+            similarchar = WORDEMBEDDER.most_similar(positive=[char])
+            print("== char: %s" % char)
+            print(similarchar)
+
         list_chords = load_list_chords(chordsname, nb_chords=4, shuffle=False)
 
         for word in words:

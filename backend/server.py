@@ -1,4 +1,5 @@
 import json
+import os
 
 from flask import Flask
 from flask import request
@@ -46,7 +47,6 @@ def similarity():
 @app.route('/word_music_sheet', methods=['POST']) #GET requests will be blocked
 def similarity_word_listchords():
     req_data = request.get_json()
-    print(req_data)
 
     word = req_data['word']
     list_chords = req_data['chords']
@@ -54,9 +54,31 @@ def similarity_word_listchords():
         word,
         list_chords
     )
+    print("== word: %s" % word)
+    for chord in list_chords:
+        print(chord)
     return json.dumps(list_chords)
 
-
+#
+# def get_parser():
+#     import argparse
+#     parser = argparse.ArgumentParser(description="Do something.")
+#     parser.add_argument('--fname', type=str, default="resources/cc.fr.300.bin")
+#     parser.add_argument('--limit', type=int, default=1000)
+#     return parser
+#
+#
+# def main():
+#     parser = get_parser()
+#     args = parser.parse_args()
+#     if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+#         word_similarity.init_wordembedder(
+#             fname=args.fname,
+#             limit=args.limit)
+#         simpremiermot = word_similarity.similarity("premier", "mot")
+#         print("simpremiermot: %s" % simpremiermot)
+#
 
 if __name__ == '__main__':
+    # main()
     app.run(debug=True, port=5000)
