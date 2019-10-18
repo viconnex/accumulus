@@ -45,14 +45,14 @@ const patternBuffers = {};
 const patternPlayers = {};
 export const patterns = ['Drums', 'Bass', 'Chords', 'Melodies'];
 for (let p of patterns) {
-  for (let i = 1; i < 5; i++) {
-    patternBuffers[`${p}${i}`] = new Tone.Buffer(require('../assets/patterns/' + p + i + '.ogg'));
+  for (let i = 1; i < 9; i++) {
+    patternBuffers[`${p}${i}`] = new Tone.Buffer(require('../assets/loops/' + p + i + '.wav'));
   }
 }
 
 for (let p of patterns) {
-  for (let i = 1; i < 5; i++) {
-    patternPlayers[`${p}${i}`] = new Tone.Player(patternBuffers[`${p}${i}`]).toMaster();
+  for (let i = 1; i < 9; i++) {
+    patternPlayers[`${p}${i}`] = new Tone.Player(patternBuffers[`${p}${i}`]);
   }
 }
 
@@ -135,28 +135,15 @@ export function playNote(indice, key = 'F') {
   players[note].start();
 }
 
-export function addPattern(indice, pattern) {
-  /*a
-  *
-  * Tone.Transport.schedule(function play(time) {
-    patternPlayers[pattern].start(0);
-    console.log(time, patternBuffers[pattern].duration)
-    Tone.Transport.schedule(play, patternBuffers[pattern].duration);
-  }, 0);
-
-  Tone.Transport.toggle()
-  * */
-
-
-  Tone.Transport.bpm.value = 200;
+export function addPattern(indice, pattern, volume) {
+  Tone.Transport.bpm.value = 180;
   return new Promise((resolve, reject) => {
     Tone.Transport.pause();
     const loop = new Tone.Loop(function(time) {
-      patternPlayers[pattern].start(time);
+      patternPlayers[pattern].connect(volume).start(time);
       resolve();
     }, patternBuffers[pattern].duration).start(0);
 
-    // Tone.Transport.syncSignal();
     Tone.Transport.toggle();
   });
 }
