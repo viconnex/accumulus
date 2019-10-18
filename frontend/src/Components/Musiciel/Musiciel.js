@@ -20,17 +20,32 @@ const headerHeight = 50;
 const cloudBaseWidth = 100;
 const chuteMax = window.innerHeight - 10;
 const cloudHeight = Math.round(cloudBaseWidth / 3 + (cloudBaseWidth * 35) / 150);
-const wanderingScaleFactor = 1 / 3;
-const musicSheetHeight = Math.round(window.innerHeight * (1 - wanderingScaleFactor));
+const wanderingScaleFactor = 1 / 5;
+const uploadedScaleFactor = 1 / 3;
+
+const musicSheetHeight = Math.round(window.innerHeight * (1 - wanderingScaleFactor - uploadedScaleFactor));
 const wanderingHeight = window.innerHeight * wanderingScaleFactor;
+const uploadedHeight = window.innerHeight * uploadedScaleFactor;
 const deriveMax = window.innerWidth - cloudBaseWidth;
-const verticalspace = Math.round((musicSheetHeight - headerHeight) / 4);
+const verticalspace = Math.round((musicSheetHeight - headerHeight) / 3.2);
 
 const chords = [
-  { chordAltitude: musicSheetHeight - cloudHeight, leftNote: 'ricochet', rightNote: 'simulacre' },
-  { chordAltitude: musicSheetHeight - verticalspace - cloudHeight, leftNote: 'fantome', rightNote: 'mur' },
-  { chordAltitude: musicSheetHeight - 2 * verticalspace - cloudHeight, leftNote: 'calme', rightNote: 'vent' },
-  { chordAltitude: musicSheetHeight - 3 * verticalspace - cloudHeight, leftNote: 'machicoulis', rightNote: 'vitre' },
+  { chordAltitude: musicSheetHeight + wanderingHeight + headerHeight, leftNote: 'ricochet', rightNote: 'simulacre' },
+  {
+    chordAltitude: musicSheetHeight + wanderingHeight + headerHeight - verticalspace,
+    leftNote: 'fantome',
+    rightNote: 'mur',
+  },
+  {
+    chordAltitude: musicSheetHeight + wanderingHeight + headerHeight - 2 * verticalspace,
+    leftNote: 'calme',
+    rightNote: 'vent',
+  },
+  {
+    chordAltitude: musicSheetHeight + wanderingHeight + headerHeight - 3 * verticalspace,
+    leftNote: 'machicoulis',
+    rightNote: 'vitre',
+  },
 ];
 
 const createCloud = (id, name, sheet, initialPos, baseWidth) => {
@@ -50,6 +65,7 @@ const initialPos = sheet => {
 const Musiciel = ({ location: { search } }) => {
   const [cloudId, setCloudId] = useState(0);
   const [clouds, setClouds] = useState([]);
+  const [uploadedClouds, setUploadedClouds] = useState([]);
   const [pentaKey, setPentaKey] = useState('F');
   const [musicloud, setMusicloud] = useState(null);
   const [nuageName, setNuageName] = useState('');
@@ -62,6 +78,10 @@ const Musiciel = ({ location: { search } }) => {
       rightNote,
       note: Math.random(),
     }));
+  };
+
+  const getBaseWidth = () => {
+    return Math.max(Math.round(random(80, 160)), nuageName.length * 8);
   };
 
   // const urlParam = new URLSearchParams(search);
@@ -91,8 +111,8 @@ const Musiciel = ({ location: { search } }) => {
       resolve();
     }).then(() => setPentaKey(key));
 
-  const addCloud = nuageName => {
-    const l = [...clouds, nuageName];
+  const addCloud = newCloud => {
+    const l = [...clouds, newCloud];
     setClouds(l);
   };
 
@@ -116,7 +136,7 @@ const Musiciel = ({ location: { search } }) => {
       if (musicloud === null) {
         const newMusicloudName = upcomingClouds.shift();
         const sheet = await getMusicSheet(newMusicloudName, chords);
-        const baseWidth = Math.max(Math.round(random(80, 160)), nuageName.length * 8);
+        const baseWidth = getBaseWidth();
         setMusicloud(createCloud(cloudId, newMusicloudName, sheet, initialPos(sheet), baseWidth));
         musicloudOffset += 1;
       }
@@ -125,7 +145,7 @@ const Musiciel = ({ location: { search } }) => {
         ...clouds,
         ...upcomingClouds.map(async (cloudName, index) => {
           const sheet = await getMusicSheet();
-          const baseWidth = Math.max(Math.round(random(80, 160)), nuageName.length * 8);
+          const baseWidth = getBaseWidth();
           return createCloud(cloudId + musicloudOffset + index, cloudName, sheet, initialPos(sheet), baseWidth);
         }),
       ];
@@ -143,7 +163,7 @@ const Musiciel = ({ location: { search } }) => {
 
     const sheet = await getMusicSheet(nuageNameLowerCase, chords);
 
-    const baseWidth = Math.max(Math.round(random(80, 160)), nuageName.length * 8);
+    const baseWidth = getBaseWidth();
     const initialPos = { x: sheet[0].note * deriveMax, y: chuteMax };
     if (musicloud === null) {
       setMusicloud(createCloud(cloudId, nuageNameLowerCase, sheet, initialPos, baseWidth));
@@ -156,6 +176,14 @@ const Musiciel = ({ location: { search } }) => {
   };
 
   const handleSkyLanding = () => {
+    musicloud.initialPos = {
+      x: document.getElementById(musicloud.id).getBoundingClientRect().x,
+      y: document.getElementById(musicloud.id).getBoundingClientRect().y,
+    };
+    console.log('initialpos handle', musicloud);
+    const newUploadedCloudsList = [...uploadedClouds, musicloud];
+    setUploadedClouds(newUploadedCloudsList);
+
     if (clouds.length === 0) return setMusicloud(null);
     const initialPos = {
       x: document.getElementById(clouds[0].id).getBoundingClientRect().x,
@@ -166,24 +194,26 @@ const Musiciel = ({ location: { search } }) => {
     setMusicloud(newMusicloud);
     setClouds(clouds);
   };
+  console.log('clouds', clouds);
   return (
     <div className="ciel">
       {clouds.map(cloud => (
         <WanderingCumulus
           cloudId={cloud.id}
           key={cloud.id}
+          nuageName={cloud.name}
+          baseWidth={cloud.baseWidth}
           cloudBaseWidth={cloudBaseWidth}
           cloudHeight={cloudHeight}
           deriveMax={deriveMax}
-          nuageName={cloud.name}
-          baseWidth={cloud.baseWidth}
-          meanHeight={musicSheetHeight + wanderingHeight / 2}
+          meanHeight={uploadedHeight + musicSheetHeight + wanderingHeight / 2}
           wanderingHeight={wanderingHeight}
         />
       ))}
       <AirGuitar chords={chords} baseWidth={Math.round(cloudBaseWidth)} />
       {musicloud && (
         <Musicumulus
+          cloudId={musicloud.id}
           key={musicloud.id}
           pentaKey={pentaKey}
           initialPos={musicloud.initialPos}
@@ -194,6 +224,20 @@ const Musiciel = ({ location: { search } }) => {
           handleSkyLanding={handleSkyLanding}
         />
       )}
+      {uploadedClouds.map(cloud => (
+        <WanderingCumulus
+          cloudId={cloud.id}
+          key={cloud.id}
+          nuageName={cloud.name}
+          baseWidth={cloud.baseWidth}
+          initialPos={cloud.initialPos}
+          cloudBaseWidth={cloudBaseWidth}
+          cloudHeight={cloudHeight}
+          deriveMax={deriveMax}
+          meanHeight={uploadedHeight / 2}
+          wanderingHeight={uploadedHeight}
+        />
+      ))}
       <div className="superficiel">
         <form onSubmit={dessineLeNuage} className="dessinage">
           <Textfield

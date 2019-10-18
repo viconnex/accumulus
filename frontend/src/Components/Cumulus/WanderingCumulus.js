@@ -17,11 +17,12 @@ const WanderingCumulus = ({
   deriveMax,
   meanHeight,
   wanderingHeight,
+  initialPos,
 }) => {
   // reference to the DOM node
   var cumulus = null;
-  const [isVisibleX, setIsVisibleX] = useState(false);
-  const [isVisibleY, setIsVisibleY] = useState(false);
+  const [isVisibleX, setIsVisibleX] = useState(!!initialPos);
+  const [isVisibleY, setIsVisibleY] = useState(!!initialPos);
 
   // const [isArrived, arrive] = useState(false);
 
@@ -36,34 +37,46 @@ const WanderingCumulus = ({
     const xspeed = random(1) < 0.2 ? random(20, 50) : random(50, 150);
     const yspeed = random(1) < 0.2 ? random(20, 50) : random(50, 150);
 
+    const wander = cumulus => () => {
+      TweenMax.to(cumulus, xspeed, {
+        x: '+=' + twoPi,
+        repeat: -1,
+        modifiers: {
+          x: function(x) {
+            return Math.cos(x) * xradius + xdecalage;
+          },
+        },
+        onStart: () => {
+          setIsVisibleX(true);
+        },
+      });
+
+      TweenMax.to(cumulus, yspeed, {
+        y: '+=' + twoPi,
+        repeat: -1,
+        modifiers: {
+          y: function(y) {
+            return Math.sin(y) * yradius + ydecalage;
+          },
+        },
+        onStart: () => setIsVisibleY(true),
+      });
+    };
+    if (initialPos) {
+      console.log('initialPos', initialPos.x, initialPos.y);
+    }
     TweenLite.set(cumulus, {
-      x: random(-twoPi, twoPi) + xdecalage,
-      y: random(-twoPi, twoPi) + ydecalage,
+      x: initialPos ? initialPos.x : random(-twoPi, twoPi) + xdecalage,
+      y: initialPos ? initialPos.y : random(-twoPi, twoPi) + ydecalage,
     });
 
-    TweenMax.to(cumulus, xspeed, {
-      x: '+=' + twoPi,
-      repeat: -1,
-      modifiers: {
-        x: function(x) {
-          return Math.cos(x) * xradius + xdecalage;
-        },
-      },
-      onStart: () => {
-        setIsVisibleX(true);
-      },
-    });
-
-    TweenMax.to(cumulus, yspeed, {
-      y: '+=' + twoPi,
-      repeat: -1,
-      modifiers: {
-        y: function(y) {
-          return Math.sin(y) * yradius + ydecalage;
-        },
-      },
-      onStart: () => setIsVisibleY(true),
-    });
+    wander(cumulus)();
+    // TweenMax.to(cumulus, 3, {
+    //   x: random(-twoPi, twoPi) + xdecalage,
+    //   y: random(-twoPi, twoPi) + ydecalage,
+    //   onComplete: () => {
+    //   },
+    // });
   }, [cumulus]);
 
   return (

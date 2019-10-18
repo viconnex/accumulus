@@ -8,7 +8,16 @@ import { playNote, addPattern, patterns } from '../../helpers/generator';
 
 const ableton = ['Drums2', 'Bass1', 'Chords3', 'Melodies4'];
 
-const Musicumulus = ({ handleSkyLanding, baseWidth, nuageName, musicSheet, deriveMax, initialPos, pentaKey }) => {
+const Musicumulus = ({
+  cloudId,
+  handleSkyLanding,
+  baseWidth,
+  nuageName,
+  musicSheet,
+  deriveMax,
+  initialPos,
+  pentaKey,
+}) => {
   // reference to the DOM node
   var cumulus = null;
 
@@ -24,16 +33,19 @@ const Musicumulus = ({ handleSkyLanding, baseWidth, nuageName, musicSheet, deriv
       y: initialPos.y,
     });
 
-    const blowUp = (cumulus, note) => () => {
-      TweenMax.to(cumulus, 1, {
-        y: 0,
+    const blowUp = (cumulus, note) => {
+      console.log('blowup');
+      TweenMax.to(cumulus, 5, {
+        y: 100,
         onStart: () => null, // playNote(note),
         onComplete: () => {
+          console.log('complete');
           setTimeout(() => {
+            console.log('timout');
             arrive(true);
             Tone.Transport.stop();
             Tone.Transport.cancel();
-          }, 10000);
+          }, 1000);
           // Tone.Transport.stop();
           // Tone.Transport.cancel();
           // synth.triggerRelease();
@@ -59,7 +71,7 @@ const Musicumulus = ({ handleSkyLanding, baseWidth, nuageName, musicSheet, deriv
             // playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
             // addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 4)}`);
             addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 4)}`).then(() => {
-              blowUp(cumulus, null)();
+              blowUp(cumulus, null);
             });
           }
         },
@@ -73,7 +85,7 @@ const Musicumulus = ({ handleSkyLanding, baseWidth, nuageName, musicSheet, deriv
   const cleanUp = () => {};
 
   return (
-    <div ref={div => (cumulus = div)} className="cumulus">
+    <div id={cloudId} ref={div => (cumulus = div)} className="cumulus">
       <Nuage nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
