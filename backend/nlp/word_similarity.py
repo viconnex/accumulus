@@ -25,6 +25,7 @@ def init_wordembedder(
     #     fname=fname,
     #     binary=binary,
     #     limit=limit)
+    print("Finished word2Vec loading")
     return WORDEMBEDDER
 
 
