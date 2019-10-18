@@ -38,26 +38,35 @@ const Musicumulus = ({
     const blowUp = (cumulus, note) => {
       TweenMax.to(cumulus, 5, {
         y: 100,
-        opacity: replacementPos ? 1 : 0,
+        // opacity: replacementPos ? 1 : 0,
         onStart: () => null, // playNote(note),
         onComplete: () =>
           new Promise(resolve => {
-            setTimeout(() => {
+            function hoverinCloud(destination) {
               TweenMax.to(cumulus, 3, {
-                x: replacementPos.x,
-                y: replacementPos.y,
+                y: destination,
+                ease: Bounce.easeOut,
+                onComplete: () => hoverinCloud(destination === 95 ? 100 : 95),
+              });
+            }
+            hoverinCloud(95);
+            setTimeout(() => {
+              /*TweenMax.to(cumulus, 3, {
+                // x: replacementPos.x,
+                y: 50,
                 ease: Bounce.easeOut,
                 onComplete: () => {
                   // arrive(true);
+                  TweenMax.to(cumulus, 5, {});
                 },
-              });
+              });*/
               Tone.Transport.stop();
               Tone.Transport.cancel();
               let initialVolume = -10;
               const interval = setInterval(() => {
                 volume.volume.value = initialVolume;
                 initialVolume -= 0.25;
-              }, 200);
+              }, 100);
               setTimeout(() => {
                 clearInterval(interval);
                 resolve();
