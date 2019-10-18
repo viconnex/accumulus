@@ -20,7 +20,7 @@ def init_wordembedder(
 
     from gensim.models.keyedvectors import KeyedVectors
     binary = fname.endswith(".bin")
-    print("Loading word2Vec from fname: %s" % fname)
+    print("Loading word2Vec from fname: %s with limit: %s" % (fname, limit))
     WORDEMBEDDER = wrapper_gensim._load_word2vec_format(
         KeyedVectors,
         fname=fname,
@@ -62,10 +62,10 @@ def similarity(word1, word2):
     """todo"""
     global WORDEMBEDDER
     if WORDEMBEDDER is None:
-        # print("WORDEMBEDDER still none, sleep 4")
-        # time.sleep(4)
-        # return similarity(word1, word2)
-        init_wordembedder()
+        print("WORDEMBEDDER still none, sleep 4")
+        time.sleep(4)
+        return similarity(word1, word2)
+        # init_wordembedder()
 
     if word1 not in WORDEMBEDDER:
         return 0

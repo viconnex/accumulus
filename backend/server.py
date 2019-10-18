@@ -59,26 +59,26 @@ def similarity_word_listchords():
         print(chord)
     return json.dumps(list_chords)
 
-#
-# def get_parser():
-#     import argparse
-#     parser = argparse.ArgumentParser(description="Do something.")
-#     parser.add_argument('--fname', type=str, default="resources/cc.fr.300.bin")
-#     parser.add_argument('--limit', type=int, default=1000)
-#     return parser
-#
-#
-# def main():
-#     parser = get_parser()
-#     args = parser.parse_args()
-#     if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
-#         word_similarity.init_wordembedder(
-#             fname=args.fname,
-#             limit=args.limit)
-#         simpremiermot = word_similarity.similarity("premier", "mot")
-#         print("simpremiermot: %s" % simpremiermot)
-#
+
+def get_parser():
+    import argparse
+    parser = argparse.ArgumentParser(description="Do something.")
+    parser.add_argument('--fname', type=str, default="resources/cc.fr.300.bin")
+    parser.add_argument('--limit', type=int, default=500000)
+    return parser
+
+
+def main():
+    parser = get_parser()
+    args = parser.parse_args()
+    word_similarity.init_wordembedder(
+        fname=args.fname,
+        limit=args.limit)
+    simpremiermot = word_similarity.similarity("premier", "mot")
+    print("simpremiermot: %s" % simpremiermot)
+
 
 if __name__ == '__main__':
-    # main()
+    if os.environ.get('WERKZEUG_RUN_MAIN') == 'true':
+        main()
     app.run(debug=True, port=5000)
