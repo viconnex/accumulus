@@ -33,7 +33,7 @@ const AirGuitar = ({ chords, baseWidth }) => {
   return (
     <div>
       {chords.map(chord => {
-        return <CloudChord key={chord.chordAltitude} chord={chord} baseWidth={baseWidth} />;
+        return <CloudChord key={chord.leftNote + chord.rightNote} chord={chord} baseWidth={baseWidth} />;
       })}
     </div>
   );

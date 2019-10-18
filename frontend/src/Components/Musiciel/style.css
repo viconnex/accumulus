@@ -16,7 +16,8 @@
 }
 
 .MuiInputBase-input {
-  color: lightgray !important;
+  /* color: lightgray !important; */
+  color: black !important;
 }
 
 .ambiancage {

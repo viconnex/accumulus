@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { TweenLite, TweenMax } from 'gsap/TweenMax';
+import { TweenLite, TweenMax, Bounce } from 'gsap/TweenMax';
 import { random } from 'utils/helpers';
 import { Nuage } from './Nuage';
 import Tone from 'tone';
 import './style.css';
-import { playNote } from '../../helpers/generator';
+import { playNote, addPattern, patterns } from '../../helpers/generator';
 
-const chuteMax = window.innerHeight - 10;
+const ableton = ['Drums2', 'Bass1', 'Chords3', 'Melodies4'];
 
-const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, pentaKey }) => {
+const Musicumulus = ({
+  cloudId,
+  handleSkyLanding,
+  baseWidth,
+  nuageName,
+  musicSheet,
+  deriveMax,
+  initialPos,
+  pentaKey,
+  replacementPos,
+}) => {
   // reference to the DOM node
   var cumulus = null;
 
@@ -20,16 +30,34 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, penta
 
   useEffect(() => {
     TweenLite.set(cumulus, {
-      x: musicSheet[0].note * deriveMax,
-      y: chuteMax,
+      x: initialPos.x,
+      y: initialPos.y,
     });
 
-    const blowUp = (cumulus, note) => () => {
-      TweenMax.to(cumulus, 1, {
-        y: 0,
+    const blowUp = (cumulus, note) => {
+      TweenMax.to(cumulus, 5, {
+        y: 100,
+        opacity: replacementPos ? 1 : 0,
         onStart: () => null, // playNote(note),
         onComplete: () => {
-          arrive(true);
+          setTimeout(() => {
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+            if (!replacementPos) {
+              arrive(true);
+            } else {
+              TweenMax.to(cumulus, 3, {
+                x: replacementPos.x,
+                y: replacementPos.y,
+                ease: Bounce.easeOut,
+                onComplete: () => {
+                  arrive(true);
+                },
+              });
+            }
+          }, 1000);
+          // Tone.Transport.stop();
+          // Tone.Transport.cancel();
           // synth.triggerRelease();
         },
       });
@@ -41,15 +69,20 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, penta
         y: musicSheet[index].chordAltitude,
         onStart: () => {
           if (index > 0) {
-            playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
+            // playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
           }
         },
         onComplete: () => {
           if (index < musicSheet.length - 1) {
-            twinTo(index + 1, cumulus)();
+            addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 4)}`).then(() => {
+              twinTo(index + 1, cumulus)();
+            });
           } else {
-            playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
-            blowUp(cumulus, null)();
+            // playNote(Math.floor(musicSheet[index].note * 7), pentaKey);
+            // addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 4)}`);
+            addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 4)}`).then(() => {
+              blowUp(cumulus, null);
+            });
           }
         },
         // ease: Power4.easeOut,
@@ -59,10 +92,10 @@ const Musicumulus = ({ handleSkyLanding, nuageName, musicSheet, deriveMax, penta
     twinTo(0, cumulus)();
   }, [cumulus]);
 
-  const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
+  const cleanUp = () => {};
 
   return (
-    <div ref={div => (cumulus = div)} className="cumulus">
+    <div id={cloudId} ref={div => (cumulus = div)} className="cumulus" style={{ opacity: 0.9 }}>
       <Nuage nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );

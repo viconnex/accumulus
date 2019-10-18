@@ -9,24 +9,22 @@ import './style.css';
 const twoPi = Math.PI * 2;
 
 const WanderingCumulus = ({
-  handleSkyLanding,
+  cloudId,
   nuageName,
+  baseWidth,
   cloudBaseWidth,
   cloudHeight,
   deriveMax,
   meanHeight,
   wanderingHeight,
+  initialPos,
 }) => {
   // reference to the DOM node
   var cumulus = null;
-  const [isVisibleX, setIsVisibleX] = useState(false);
-  const [isVisibleY, setIsVisibleY] = useState(false);
+  const [isVisibleX, setIsVisibleX] = useState(!!initialPos);
+  const [isVisibleY, setIsVisibleY] = useState(!!initialPos);
 
-  const [isArrived, arrive] = useState(false);
-  useEffect(() => {
-    if (isArrived) handleSkyLanding();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isArrived]);
+  // const [isArrived, arrive] = useState(false);
 
   useEffect(() => {
     const xradius = random(1) < 0.35 ? random(deriveMax / 3, deriveMax / 2) : random(deriveMax / 6, deriveMax / 3);
@@ -40,10 +38,9 @@ const WanderingCumulus = ({
     const yspeed = random(1) < 0.2 ? random(20, 50) : random(50, 150);
 
     TweenLite.set(cumulus, {
-      x: random(-twoPi, twoPi) + xdecalage,
-      y: random(-twoPi, twoPi) + ydecalage,
+      x: initialPos ? initialPos.x : random(-twoPi, twoPi) + xdecalage,
+      y: initialPos ? initialPos.y : random(-twoPi, twoPi) + ydecalage,
     });
-
     TweenMax.to(cumulus, xspeed, {
       x: '+=' + twoPi,
       repeat: -1,
@@ -52,7 +49,9 @@ const WanderingCumulus = ({
           return Math.cos(x) * xradius + xdecalage;
         },
       },
-      onStart: () => setIsVisibleX(true),
+      onStart: () => {
+        setIsVisibleX(true);
+      },
     });
 
     TweenMax.to(cumulus, yspeed, {
@@ -65,12 +64,23 @@ const WanderingCumulus = ({
       },
       onStart: () => setIsVisibleY(true),
     });
+
+    // wander(cumulus, initialPos)();
+    // TweenMax.to(cumulus, 3, {
+    //   x: random(-twoPi, twoPi) + xdecalage,
+    //   y: random(-twoPi, twoPi) + ydecalage,
+    //   onComplete: () => {
+    //   },
+    // });
   }, [cumulus]);
 
-  const [baseWidth] = useState(Math.max(random(80, 160), nuageName.length * 8));
-
   return (
-    <div ref={div => (cumulus = div)} className="cumulus" style={{ opacity: isVisibleX && isVisibleY ? 1 : 0 }}>
+    <div
+      id={cloudId}
+      ref={div => (cumulus = div)}
+      className="cumulus"
+      style={{ opacity: isVisibleX && isVisibleY ? 0.7 : 0 }}
+    >
       <Nuage nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
