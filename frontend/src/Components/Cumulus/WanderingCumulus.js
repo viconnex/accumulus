@@ -37,40 +37,35 @@ const WanderingCumulus = ({
     const xspeed = random(1) < 0.2 ? random(20, 50) : random(50, 150);
     const yspeed = random(1) < 0.2 ? random(20, 50) : random(50, 150);
 
-    const wander = cumulus => () => {
-      TweenMax.to(cumulus, xspeed, {
-        x: '+=' + twoPi,
-        repeat: -1,
-        modifiers: {
-          x: function(x) {
-            return Math.cos(x) * xradius + xdecalage;
-          },
-        },
-        onStart: () => {
-          setIsVisibleX(true);
-        },
-      });
-
-      TweenMax.to(cumulus, yspeed, {
-        y: '+=' + twoPi,
-        repeat: -1,
-        modifiers: {
-          y: function(y) {
-            return Math.sin(y) * yradius + ydecalage;
-          },
-        },
-        onStart: () => setIsVisibleY(true),
-      });
-    };
-    if (initialPos) {
-      console.log('initialPos', initialPos.x, initialPos.y);
-    }
     TweenLite.set(cumulus, {
       x: initialPos ? initialPos.x : random(-twoPi, twoPi) + xdecalage,
       y: initialPos ? initialPos.y : random(-twoPi, twoPi) + ydecalage,
     });
+    TweenMax.to(cumulus, xspeed, {
+      x: '+=' + twoPi,
+      repeat: -1,
+      modifiers: {
+        x: function(x) {
+          return Math.cos(x) * xradius + xdecalage;
+        },
+      },
+      onStart: () => {
+        setIsVisibleX(true);
+      },
+    });
 
-    wander(cumulus)();
+    TweenMax.to(cumulus, yspeed, {
+      y: '+=' + twoPi,
+      repeat: -1,
+      modifiers: {
+        y: function(y) {
+          return Math.sin(y) * yradius + ydecalage;
+        },
+      },
+      onStart: () => setIsVisibleY(true),
+    });
+
+    // wander(cumulus, initialPos)();
     // TweenMax.to(cumulus, 3, {
     //   x: random(-twoPi, twoPi) + xdecalage,
     //   y: random(-twoPi, twoPi) + ydecalage,
@@ -84,7 +79,7 @@ const WanderingCumulus = ({
       id={cloudId}
       ref={div => (cumulus = div)}
       className="cumulus"
-      style={{ opacity: isVisibleX && isVisibleY ? 1 : 0 }}
+      style={{ opacity: isVisibleX && isVisibleY ? 0.7 : 0 }}
     >
       <Nuage nuageName={nuageName} baseWidth={baseWidth} />
     </div>

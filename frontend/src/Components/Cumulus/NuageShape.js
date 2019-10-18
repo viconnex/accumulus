@@ -6,7 +6,8 @@ export const NuageShape = styled.div`
   height: ${props => props.baseWidth / 3}px;
   border-radius: ${props => props.baseWidth}px;
   position: relative;
-  background: #d9d8d0;
+  /* background: #d9d8d0; */
+  background: white;
   color: black;
 
   &:before,
@@ -14,7 +15,8 @@ export const NuageShape = styled.div`
     content: '';
     border-radius: ${props => props.baseWidth}px;
     position: absolute;
-    background: #d9d8d0;
+    /* background: #d9d8d0; */
+    background: white;
   }
   &:before {
     width: ${props => props.baseWidth / 3}px;

@@ -17,6 +17,7 @@ const Musicumulus = ({
   deriveMax,
   initialPos,
   pentaKey,
+  replacementPos,
 }) => {
   // reference to the DOM node
   var cumulus = null;
@@ -34,17 +35,25 @@ const Musicumulus = ({
     });
 
     const blowUp = (cumulus, note) => {
-      console.log('blowup');
       TweenMax.to(cumulus, 5, {
         y: 100,
+        opacity: replacementPos ? 1 : 0,
         onStart: () => null, // playNote(note),
         onComplete: () => {
-          console.log('complete');
           setTimeout(() => {
-            console.log('timout');
-            arrive(true);
             Tone.Transport.stop();
             Tone.Transport.cancel();
+            if (!replacementPos) {
+              arrive(true);
+            } else {
+              TweenMax.to(cumulus, 3, {
+                x: replacementPos.x,
+                y: replacementPos.y,
+                onComplete: () => {
+                  arrive(true);
+                },
+              });
+            }
           }, 1000);
           // Tone.Transport.stop();
           // Tone.Transport.cancel();
@@ -85,7 +94,7 @@ const Musicumulus = ({
   const cleanUp = () => {};
 
   return (
-    <div id={cloudId} ref={div => (cumulus = div)} className="cumulus">
+    <div id={cloudId} ref={div => (cumulus = div)} className="cumulus" style={{ opacity: 0.9 }}>
       <Nuage nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
