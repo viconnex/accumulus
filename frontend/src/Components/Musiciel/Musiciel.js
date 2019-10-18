@@ -54,6 +54,7 @@ const Musiciel = ({ location: { search } }) => {
   const [musicloud, setMusicloud] = useState(null);
   const [nuageName, setNuageName] = useState('');
   const [hasAlreadyDrawn, setHasAlreadyDrawn] = useState(false);
+
   const createRandomSheet = () => {
     return chords.map(({ chordAltitude, leftNote, rightNote }) => ({
       chordAltitude,
@@ -95,16 +96,26 @@ const Musiciel = ({ location: { search } }) => {
     setClouds(l);
   };
 
+  const getMusicSheet = async (word, chords) => {
+    try {
+      const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', { word, chords });
+      const sheet = await response.json();
+      return sheet;
+    } catch {
+      return createRandomSheet();
+    }
+  };
+
   // receive clouds from other skies
   useEffect(() => {
     const socket = sockeIOClient(API_GATEWAY_URL, { path: API_GATEWAY_PATH });
-    socket.on('upload', upcomingClouds => {
+    socket.on('upload', async upcomingClouds => {
       if (upcomingClouds.length === 0) return;
 
       let musicloudOffset = 0;
       if (musicloud === null) {
         const newMusicloudName = upcomingClouds.shift();
-        const sheet = createRandomSheet();
+        const sheet = await getMusicSheet(newMusicloudName, chords);
         const baseWidth = Math.max(Math.round(random(80, 160)), nuageName.length * 8);
         setMusicloud(createCloud(cloudId, newMusicloudName, sheet, initialPos(sheet), baseWidth));
         musicloudOffset += 1;
@@ -112,8 +123,8 @@ const Musiciel = ({ location: { search } }) => {
 
       const l = [
         ...clouds,
-        ...upcomingClouds.map((cloudName, index) => {
-          const sheet = createRandomSheet();
+        ...upcomingClouds.map(async (cloudName, index) => {
+          const sheet = await getMusicSheet();
           const baseWidth = Math.max(Math.round(random(80, 160)), nuageName.length * 8);
           return createCloud(cloudId + musicloudOffset + index, cloudName, sheet, initialPos(sheet), baseWidth);
         }),
@@ -130,17 +141,8 @@ const Musiciel = ({ location: { search } }) => {
     event.preventDefault();
     var nuageNameLowerCase = nuageName.split(' ')[0].toLocaleLowerCase();
 
-    const body = {
-      word: nuageNameLowerCase,
-      chords,
-    };
-    let sheet;
-    try {
-      const response = await fetchRequest('http://127.0.0.1:5000/word_music_sheet', 'POST', body);
-      sheet = await response.json();
-    } catch {
-      sheet = createRandomSheet();
-    }
+    const sheet = await getMusicSheet(nuageNameLowerCase, chords);
+
     const baseWidth = Math.max(Math.round(random(80, 160)), nuageName.length * 8);
     const initialPos = { x: sheet[0].note * deriveMax, y: chuteMax };
     if (musicloud === null) {
