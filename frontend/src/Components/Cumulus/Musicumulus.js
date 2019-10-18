@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { TweenLite, TweenMax } from 'gsap/TweenMax';
+import { TweenLite, TweenMax, Bounce } from 'gsap/TweenMax';
 import { random } from 'utils/helpers';
 import { Nuage } from './Nuage';
 import Tone from 'tone';
@@ -49,6 +49,7 @@ const Musicumulus = ({
               TweenMax.to(cumulus, 3, {
                 x: replacementPos.x,
                 y: replacementPos.y,
+                ease: Bounce.easeOut,
                 onComplete: () => {
                   arrive(true);
                 },
