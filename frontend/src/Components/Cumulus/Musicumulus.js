@@ -22,6 +22,7 @@ const Musicumulus = ({
   // reference to the DOM node
   var cumulus = null;
   const volume = new Tone.Channel(-5).connect(Tone.Master);
+  console.log(musicSheet);
 
   const [isArrived, arrive] = useState(false);
   useEffect(() => {
@@ -87,11 +88,11 @@ const Musicumulus = ({
         },
         onComplete: () => {
           if (index < musicSheet.length - 1) {
-            addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 8)}`, volume).then(() => {
+            addPattern(null, `${patterns[index]}${Math.ceil(musicSheet[index].note * 8)}`, volume).then(() => {
               twinTo(index + 1, cumulus)();
             });
           } else {
-            addPattern(null, `${patterns[index]}${Math.ceil(Math.random() * 8)}`, volume).then(() => {
+            addPattern(null, `${patterns[index]}${Math.ceil(musicSheet[index].note * 8)}`, volume).then(() => {
               blowUp(cumulus, null);
             });
           }
