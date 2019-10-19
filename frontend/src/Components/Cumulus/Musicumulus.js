@@ -120,7 +120,12 @@ const Musicumulus = ({
 
   return (
     <div id={cloudId} ref={div => (cumulus = div)} className="cumulus" style={{ opacity: 0.9 }}>
-      <Nuage color={isOptimal ? 'yellow' : 'white'} nuageName={nuageName} baseWidth={baseWidth} />
+      <Nuage
+        color={isOptimal ? 'yellow' : '#864cff'}
+        fontColor={isOptimal ? 'black' : 'white'}
+        nuageName={nuageName}
+        baseWidth={baseWidth}
+      />
     </div>
   );
 };
