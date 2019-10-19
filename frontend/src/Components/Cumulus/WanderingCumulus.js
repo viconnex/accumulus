@@ -3,26 +3,17 @@ import { TweenLite, TweenMax } from 'gsap/TweenMax';
 import { random } from 'utils/helpers';
 import { Nuage } from './Nuage';
 import './style.css';
-import { deriveMax } from 'Components/Musiciel/Musiciel';
+import { deriveMax, cloudBaseWidth } from 'Components/Musiciel/Musiciel';
 
 // TweenLite.defaultEase = Linear.easeNone;
 
 const twoPi = Math.PI * 2;
 
-const WanderingCumulus = ({
-  cloudId,
-  nuageName,
-  baseWidth,
-  cloudBaseWidth,
-  cloudHeight,
-  meanHeight,
-  wanderingHeight,
-  initialPos,
-}) => {
+const WanderingCumulus = ({ cloudId, nuageName, baseWidth, cloudHeight, meanHeight, wanderingHeight, initialPos }) => {
   // reference to the DOM node
   var cumulus = null;
-  const [isVisibleX, setIsVisibleX] = useState(!!initialPos);
-  const [isVisibleY, setIsVisibleY] = useState(!!initialPos);
+  const [isVisibleX, setIsVisibleX] = useState(false);
+  const [isVisibleY, setIsVisibleY] = useState(false);
 
   // const [isArrived, arrive] = useState(false);
 
@@ -40,9 +31,11 @@ const WanderingCumulus = ({
     TweenLite.set(cumulus, {
       x: initialPos ? initialPos.x : random(-twoPi, twoPi) + xdecalage,
       y: initialPos ? initialPos.y : random(-twoPi, twoPi) + ydecalage,
+      opacity: 0,
     });
     TweenMax.to(cumulus, xspeed, {
       x: '+=' + twoPi,
+      opactity: 1,
       repeat: -1,
       modifiers: {
         x: function(x) {
