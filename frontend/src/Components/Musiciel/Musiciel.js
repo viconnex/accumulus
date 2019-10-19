@@ -143,7 +143,6 @@ const Musiciel = ({ location: { search } }) => {
     const socket = sockeIOClient(API_GATEWAY_URL, { path: API_GATEWAY_PATH });
     socket.on('upload', async upcomingClouds => {
       if (upcomingClouds.length === 0) return;
-
       let musicloudOffset = 0;
       if (musicloud === null) {
         const newMusicloudName = upcomingClouds.shift();
@@ -153,15 +152,14 @@ const Musiciel = ({ location: { search } }) => {
         musicloudOffset += 1;
       }
 
-      const l = [
-        ...clouds,
-        ...upcomingClouds.map(async (cloudName, index) => {
-          const sheet = await getMusicSheet();
-          const baseWidth = getBaseWidth();
-          return createCloud(cloudId + musicloudOffset + index, cloudName, sheet, initialPos(sheet), baseWidth);
-        }),
-      ];
-      setClouds(l);
+      for (let index = 0; index < upcomingClouds.length; index++) {
+        const sheet = await getMusicSheet();
+        const baseWidth = getBaseWidth();
+        clouds.push(
+          createCloud(cloudId + musicloudOffset + index, upcomingClouds[index], sheet, initialPos(sheet), baseWidth),
+        );
+      }
+      setClouds(clouds);
       setCloudId(cloudId + upcomingClouds.length);
     });
     return () => {
