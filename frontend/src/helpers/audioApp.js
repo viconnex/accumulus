@@ -77,7 +77,6 @@ export const initAudio = function(
       bypass: 0
     });*/
   let url = `${soundsRootUrl}/impulse/033.wav`;
-  console.log(url);
   fxMasterEffect = new Tone.Convolver(url, () => console.log('ir loaded'));
 
   fxMasterEffect = new Tone.Freeverb(0.9, 1000);

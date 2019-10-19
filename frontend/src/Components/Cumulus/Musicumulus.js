@@ -23,7 +23,6 @@ const Musicumulus = ({
   // reference to the DOM node
   var cumulus = null;
   const volume = new Tone.Channel(-5).connect(Tone.Master);
-  console.log(musicSheet);
 
   const [isArrived, arrive] = useState(false);
   useEffect(() => {
@@ -53,15 +52,6 @@ const Musicumulus = ({
             }
             hoverinCloud(95);
             setTimeout(() => {
-              /*TweenMax.to(cumulus, 3, {
-                // x: replacementPos.x,
-                y: 50,
-                ease: Bounce.easeOut,
-                onComplete: () => {
-                  // arrive(true);
-                  TweenMax.to(cumulus, 5, {});
-                },
-              });*/
               Tone.Transport.stop();
               Tone.Transport.cancel();
               let initialVolume = -10;
@@ -71,10 +61,24 @@ const Musicumulus = ({
               }, 100);
               setTimeout(() => {
                 clearInterval(interval);
-                resolve();
+                resolve(cumulus);
               }, 5000);
             }, 10000);
-          }).then(() => arrive(true)),
+          }).then(cumulus => {
+            if (!replacementPos) {
+              TweenMax.to(cumulus, 0.5, { opacity: 0, onComplete: () => arrive(true) });
+              arrive(true);
+            } else {
+              TweenMax.to(cumulus, 2, {
+                x: replacementPos.x,
+                y: replacementPos.y,
+                ease: Bounce.easeOut,
+                onComplete: () => {
+                  arrive(true);
+                },
+              });
+            }
+          }),
       });
     };
 

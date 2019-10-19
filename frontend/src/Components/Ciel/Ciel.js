@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import sockeIOClient from 'socket.io-client';
 
-import TextField from "@material-ui/core/TextField";
+import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -13,6 +13,7 @@ import Cumulus from '../Cumulus/Cumulus';
 import './style.css';
 import { API_BASE_URL, API_GATEWAY_URL, API_GATEWAY_PATH } from 'utils/constants';
 
+import Switch from '@material-ui/core/Switch';
 // const rimages = require('utils/dictionnage.json');
 
 const rimeWith = (word, suffixe) => {
@@ -37,21 +38,27 @@ const Ciel = ({ cloud9 }) => {
   const [cloudsLandedCount, setCloudsLandedCount] = useState(0);
   const [cloudsRainedCount, setCloudsRainedCount] = useState(0);
   const [isRaining, makeItRain] = useState(false);
-
-  // useEffect(() => {
-  //   function handleUpcoming(upcomingClouds) {
-  //     const l = [...clouds, ...upcomingClouds.filter(newCloud => !clouds.includes(newCloud))];
-  //     setClouds(l);
-  //   }
-  //   if (cloud9) {
-  //     socket.on('upload', handleUpcoming);
-  //   }
-  // }, [clouds]);
+  const [autoUpload, setAutoUpload] = useState(true);
 
   const addCloud = nuageName => {
     const l = [...clouds, nuageName];
     setClouds(l);
     setNuageName('');
+    return l;
+  };
+
+  const handleUpload = autoUploadList => {
+    const uploadClouds = autoUploadList || clouds;
+
+    if (uploadClouds.length === 0) {
+      // eslint-disable-next-line no-alert
+      alert('Pas de nuage en partance pour le voyage. Trouve un nommage');
+    }
+    if (uploadClouds.length > 0 && !upload) {
+      nuagesToCloud('envoyage', uploadClouds);
+      setUpload(true);
+      setHasAlreadyDrawn(true);
+    }
   };
 
   const dessineLeNuage = event => {
@@ -66,21 +73,10 @@ const Ciel = ({ cloud9 }) => {
     if (nuageNameLowerCase.charAt(nuageNameLowerCase.length - 1) === ' ') {
       nuageNameLowerCase = nuageNameLowerCase.slice(0, -1);
     }
-    if (clouds.includes(nuageNameLowerCase)) {
-      setNuageName('');
-      return;
-    }
-    addCloud(nuageNameLowerCase);
-  };
-  const handleUpload = () => {
-    if (clouds.length === 0) {
-      // eslint-disable-next-line no-alert
-      alert('Pas de nuage en partance pour le voyage. Trouve un nommage');
-    }
-    if (clouds.length > 0 && !upload) {
-      nuagesToCloud('envoyage', clouds);
-      setUpload(true);
-      setHasAlreadyDrawn(true);
+
+    const autoUploadList = addCloud(nuageNameLowerCase);
+    if (autoUpload) {
+      handleUpload(autoUploadList);
     }
   };
 
@@ -137,25 +133,37 @@ const Ciel = ({ cloud9 }) => {
         );
       })}
       <div className="superficiel">
-        <form onSubmit={dessineLeNuage} className="dessinage">
+        <form onSubmit={dessineLeNuage} className="ciel-dessinage">
           <TextField
             onChange={event => {
               setNuageName(event.target.value);
             }}
             value={nuageName}
-            placeholder={clouds.length === 0 && !hasAlreadyDrawn ? 'Nommage' : null}
+            placeholder={clouds.length === 0 && !hasAlreadyDrawn ? 'Entre un nom de nuage' : null}
           />
         </form>
         <Tooltip title="Mouillage">
-          <IconButton style={{ position: 'absolute', right: '45px', top: '5px' }} onClick={handleMakeItRain}>
+          <IconButton style={{ position: 'absolute', right: '45px', top: '10px' }} onClick={handleMakeItRain}>
             <img alt="" src={RainLogo} style={{ width: '25px', opacity: '0.9' }} />
           </IconButton>
         </Tooltip>
         <Tooltip title="Envoyage">
-          <IconButton style={{ position: 'absolute', right: '10px', top: '5px' }} onClick={handleUpload}>
+          <IconButton style={{ position: 'absolute', right: '10px', top: '10px' }} onClick={() => handleUpload()}>
             <img alt="" src={UploadLogo} style={{ width: '25px', opacity: '0.9' }} className={upload ? 'upload' : ''} />
           </IconButton>
         </Tooltip>
+        <div
+          style={{
+            position: 'absolute',
+            left: '10px',
+            top: `${window.innerHeight - 50}px`,
+            display: 'flex',
+            alignItems: 'baseline',
+          }}
+        >
+          <Switch color="primary" checked={autoUpload} onChange={() => setAutoUpload(!autoUpload)} value="checkedA" />
+          <p style={{ color: 'white', fontSize: '14px' }}>Auto Upload</p>
+        </div>
       </div>
     </div>
   );
