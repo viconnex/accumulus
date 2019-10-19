@@ -49,7 +49,7 @@ const Musiciel = ({ location: { search } }) => {
     { left: 'charrue', right: 'sapin', color: 'white' },
     { left: 'flibustier', right: 'verrou', color: 'white' },
     { left: 'machicoulis', right: 'fantôme', color: 'white' },
-    { left: 'ascenseur', right: 'coquelicot', color: 'white' },
+    { left: 'tennis', right: 'coquelicot', color: 'white' },
   ]);
 
   const chords = words.map((wordPair, index) => {
@@ -153,7 +153,7 @@ const Musiciel = ({ location: { search } }) => {
     socket.on('upload', async upcomingClouds => {
       if (upcomingClouds.length === 0) return;
       let musicloudOffset = 0;
-      console.log(musicloud);
+      const upcomingCloudsSize = upcomingClouds.length;
       if (musicloud === null) {
         const newMusicloudName = upcomingClouds.shift();
         const sheet = await getMusicSheet(newMusicloudName, chords);
@@ -167,7 +167,7 @@ const Musiciel = ({ location: { search } }) => {
         clouds.push({ id: cloudId + musicloudOffset + index, name: upcomingClouds[index], baseWidth });
       }
       setClouds(clouds);
-      setCloudId(cloudId + upcomingClouds.length);
+      setCloudId(cloudId + upcomingCloudsSize);
     });
     return () => {
       socket.close();
@@ -211,7 +211,6 @@ const Musiciel = ({ location: { search } }) => {
       const newUploadedCloudsList = [...uploadedClouds, uploadedCloud];
       setUploadedClouds(newUploadedCloudsList);
     }
-
     if (clouds.length === 0) return setMusicloud(null);
 
     const initialPos = {
