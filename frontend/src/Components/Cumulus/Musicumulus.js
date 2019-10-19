@@ -47,10 +47,10 @@ const Musicumulus = ({
               TweenMax.to(cumulus, 3, {
                 y: destination,
                 ease: Bounce.easeOut,
-                onComplete: () => hoverinCloud(destination === 95 ? 100 : 95),
+                onComplete: () => hoverinCloud(destination === 80 ? 100 : 80),
               });
             }
-            hoverinCloud(95);
+            hoverinCloud(80);
             setTimeout(
               () => {
                 Tone.Transport.stop();
@@ -116,7 +116,7 @@ const Musicumulus = ({
 
   return (
     <div id={cloudId} ref={div => (cumulus = div)} className="cumulus" style={{ opacity: 0.9 }}>
-      <Nuage nuageName={nuageName} baseWidth={baseWidth} />
+      <Nuage color="white" nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
 };

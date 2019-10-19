@@ -17,7 +17,7 @@ import WanderingCumulus from 'Components/Cumulus/WanderingCumulus';
 import { random } from 'utils/helpers';
 
 const headerHeight = 50;
-export const cloudBaseWidth = 100;
+export const cloudBaseWidth = 150;
 const chuteMax = window.innerHeight - 10;
 const cloudHeight = Math.round(cloudBaseWidth / 3 + (cloudBaseWidth * 35) / 150);
 const wanderingScaleFactor = 1 / 3.5;
@@ -48,9 +48,8 @@ const createMusiCloud = (id, name, sheet, initialPos, baseWidth) => {
       closeWords.push({ x: deriveMax - 30, y: chord.chordAltitude, index, pos: 'right' });
     }
   });
-
   if (closeWords.length > 0) {
-    cloud.replacementPos = closeWords[Math.round(Math.random() * closeWords.length)];
+    cloud.replacementPos = closeWords[Math.floor(Math.random() * closeWords.length)];
   }
   return cloud;
 };
@@ -68,10 +67,10 @@ const Musiciel = ({ location: { search } }) => {
   const [nuageName, setNuageName] = useState('');
   const [hasAlreadyDrawn, setHasAlreadyDrawn] = useState(false);
   const [words, setWords] = useState([
-    { left: 'ricochet', right: 'sapin' },
-    { left: 'flibustier', right: 'verrou' },
-    { left: 'machicoulis', right: 'fantôme' },
-    { left: 'ascenseur', right: 'coquelicot' },
+    { left: 'ricochet', right: 'sapin', color: 'white' },
+    { left: 'flibustier', right: 'verrou', color: 'white' },
+    { left: 'machicoulis', right: 'fantôme', color: 'white' },
+    { left: 'ascenseur', right: 'coquelicot', color: 'white' },
   ]);
 
   const chords = words.map((wordPair, index) => {
@@ -79,6 +78,7 @@ const Musiciel = ({ location: { search } }) => {
       chordAltitude: musicSheetHeight + uploadedHeight - index * verticalspace,
       leftNote: wordPair.left,
       rightNote: wordPair.right,
+      color: wordPair.color,
     };
   });
 
@@ -92,7 +92,7 @@ const Musiciel = ({ location: { search } }) => {
   };
 
   const getBaseWidth = () => {
-    return Math.max(Math.round(random(70, 130)), nuageName.length * 8);
+    return Math.max(Math.round(random(100, 180)), nuageName.length * 10);
   };
 
   // const urlParam = new URLSearchParams(search);
@@ -211,6 +211,7 @@ const Musiciel = ({ location: { search } }) => {
     const newClouds = clouds.splice(1);
     setClouds(newClouds);
   };
+  console.log(musicloud);
   return (
     <div className="ciel">
       {clouds.map(cloud => (
@@ -225,7 +226,7 @@ const Musiciel = ({ location: { search } }) => {
           style={{ opacity: 0.6 }}
         />
       ))}
-      <AirGuitar chords={chords} baseWidth={Math.round(cloudBaseWidth)} />
+      <AirGuitar chords={chords} baseWidth={cloudBaseWidth} />
       {musicloud && (
         <Musicumulus
           cloudId={musicloud.id}

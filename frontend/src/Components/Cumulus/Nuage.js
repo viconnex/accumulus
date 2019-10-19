@@ -1,10 +1,10 @@
 import React from 'react';
 import { NuageShape } from './NuageShape';
 
-export const Nuage = ({ nuageName, baseWidth }) => {
+export const Nuage = ({ nuageName, baseWidth, color, borderWidth }) => {
   return (
     <div>
-      <NuageShape baseWidth={baseWidth} />
+      <NuageShape baseWidth={baseWidth} color={color} borderWidth={borderWidth || 0} />
       <div className="surrimage">
         <div className="rimage">{nuageName}</div>
       </div>

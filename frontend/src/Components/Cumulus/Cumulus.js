@@ -16,7 +16,7 @@ const twoPi = Math.PI * 2;
 const Nuage = ({ nuageName, baseWidth, isRaining, handleGoutteDropping }) => {
   return (
     <div>
-      <NuageShape baseWidth={baseWidth} />
+      <NuageShape baseWidth={baseWidth} color="white" />
       <div className="surrimage">
         <div className="rimage">
           {nuageName.split('').map(letter => (
@@ -120,6 +120,7 @@ const Cumulus = ({ nuageName, upload, handleSkyLanding, handleRainOver, isRainin
   return (
     <div ref={div => (cumulus = div)} className="cumulus" style={{ opacity: isVisibleX && isVisibleY ? 1 : 0 }}>
       <Nuage
+        color="white"
         nuageName={nuageName}
         baseWidth={baseWidth}
         isRaining={isRaining}

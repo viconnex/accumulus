@@ -74,7 +74,7 @@ const WanderingCumulus = ({ cloudId, nuageName, baseWidth, cloudHeight, meanHeig
       className="cumulus"
       style={{ opacity: isVisibleX && isVisibleY ? 0.7 : 0 }}
     >
-      <Nuage nuageName={nuageName} baseWidth={baseWidth} />
+      <Nuage color="white" nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
 };

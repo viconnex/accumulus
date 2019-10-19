@@ -22,10 +22,10 @@ const CloudChord = ({ chord, baseWidth }) => {
   return (
     <React.Fragment>
       <LeftNote chordAltitude={chord.chordAltitude}>
-        <Nuage nuageName={chord.leftNote} baseWidth={baseWidth} />
+        <Nuage color={chord.color} nuageName={chord.leftNote} baseWidth={baseWidth} borderWidth={2} />
       </LeftNote>
       <RightNote chordAltitude={chord.chordAltitude}>
-        <Nuage nuageName={chord.rightNote} baseWidth={baseWidth} />
+        <Nuage color={chord.color} nuageName={chord.rightNote} baseWidth={baseWidth} borderWidth={2} />
       </RightNote>
     </React.Fragment>
   );
