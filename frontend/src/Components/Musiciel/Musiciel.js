@@ -30,7 +30,7 @@ export const deriveMax = window.innerWidth - cloudBaseWidth;
 const verticalspace = Math.round((musicSheetHeight - headerHeight) / 2.5);
 
 const REPLACEMENT_THRESHOLD = 0.9;
-const SIMILARITY_GAP_THRESHOLD = 0.1;
+const SIMILARITY_GAP_THRESHOLD = 0.2;
 
 const initialPos = sheet => {
   return { x: sheet[0].note * (deriveMax - AIR_GUITAR_OFFSET) + AIR_GUITAR_OFFSET, y: chuteMax };
@@ -46,7 +46,7 @@ const Musiciel = ({ location: { search } }) => {
   const [hasAlreadyDrawn, setHasAlreadyDrawn] = useState(false);
   const [targets, setTargets] = useState([Math.random(), Math.random(), Math.random(), Math.random()]);
   const [words, setWords] = useState([
-    { left: 'ricochet', right: 'sapin', color: 'white' },
+    { left: 'charrue', right: 'sapin', color: 'white' },
     { left: 'flibustier', right: 'verrou', color: 'white' },
     { left: 'machicoulis', right: 'fantôme', color: 'white' },
     { left: 'ascenseur', right: 'coquelicot', color: 'white' },
@@ -72,7 +72,6 @@ const Musiciel = ({ location: { search } }) => {
     };
     const closeWords = [];
     let optimalPath = 0;
-
     sheet.forEach((chord, index) => {
       if (1 - chord.note > REPLACEMENT_THRESHOLD) {
         closeWords.push({ x: 30, y: chord.chordAltitude, index, pos: 'left' });
@@ -154,6 +153,7 @@ const Musiciel = ({ location: { search } }) => {
     socket.on('upload', async upcomingClouds => {
       if (upcomingClouds.length === 0) return;
       let musicloudOffset = 0;
+      console.log(musicloud);
       if (musicloud === null) {
         const newMusicloudName = upcomingClouds.shift();
         const sheet = await getMusicSheet(newMusicloudName, chords);
@@ -172,7 +172,7 @@ const Musiciel = ({ location: { search } }) => {
     return () => {
       socket.close();
     };
-  }, [clouds, cloudId]);
+  }, [clouds, cloudId, musicloud]);
 
   const dessineLeNuage = async event => {
     event.preventDefault();

@@ -75,6 +75,7 @@ const Musicumulus = ({
             if (!replacementPos) {
               TweenMax.to(cumulus, debug ? 0.3 : 3, { opacity: 0, onComplete: () => arrive(true) });
             } else {
+              console.log(replacementPos);
               TweenMax.to(cumulus, 2, {
                 x: replacementPos.x,
                 y: replacementPos.y,

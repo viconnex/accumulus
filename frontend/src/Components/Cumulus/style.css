@@ -5,7 +5,7 @@
 .rimage {
   display: flex;
   font-size: 18px;
-  font-weight: 500;
+  font-weight: bold;
   position: relative;
   left: -50%;
   color: black;
