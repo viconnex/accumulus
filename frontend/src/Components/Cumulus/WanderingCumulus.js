@@ -3,6 +3,7 @@ import { TweenLite, TweenMax } from 'gsap/TweenMax';
 import { random } from 'utils/helpers';
 import { Nuage } from './Nuage';
 import './style.css';
+import { deriveMax } from 'Components/Musiciel/Musiciel';
 
 // TweenLite.defaultEase = Linear.easeNone;
 
@@ -14,7 +15,6 @@ const WanderingCumulus = ({
   baseWidth,
   cloudBaseWidth,
   cloudHeight,
-  deriveMax,
   meanHeight,
   wanderingHeight,
   initialPos,

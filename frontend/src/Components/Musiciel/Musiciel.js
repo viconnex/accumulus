@@ -26,10 +26,10 @@ const uploadedScaleFactor = 1 / 3.5;
 const musicSheetHeight = Math.round(window.innerHeight * (1 - wanderingScaleFactor - uploadedScaleFactor));
 const wanderingHeight = Math.round(window.innerHeight * wanderingScaleFactor * 0.8);
 const uploadedHeight = Math.round(window.innerHeight * uploadedScaleFactor);
-const deriveMax = window.innerWidth - cloudBaseWidth;
+export const deriveMax = window.innerWidth - cloudBaseWidth;
 const verticalspace = Math.round((musicSheetHeight - headerHeight) / 2.5);
 
-const REPLACEMENT_THRESHOLD = 0.6;
+const REPLACEMENT_THRESHOLD = 0.9;
 
 const createCloud = (id, name, sheet, initialPos, baseWidth) => {
   const cloud = {
@@ -218,7 +218,6 @@ const Musiciel = ({ location: { search } }) => {
           baseWidth={cloud.baseWidth}
           cloudBaseWidth={cloudBaseWidth}
           cloudHeight={cloudHeight}
-          deriveMax={deriveMax}
           meanHeight={uploadedHeight + musicSheetHeight + cloudHeight + wanderingHeight / 2}
           wanderingHeight={wanderingHeight}
           style={{ opacity: 0.7 }}
@@ -249,7 +248,6 @@ const Musiciel = ({ location: { search } }) => {
           initialPos={cloud.initialPos}
           cloudBaseWidth={cloudBaseWidth}
           cloudHeight={cloudHeight}
-          deriveMax={deriveMax}
           meanHeight={uploadedHeight / 2}
           wanderingHeight={uploadedHeight}
           style={{ opacity: 0.7 }}

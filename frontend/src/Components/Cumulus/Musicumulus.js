@@ -5,6 +5,8 @@ import { Nuage } from './Nuage';
 import Tone from 'tone';
 import './style.css';
 import { playNote, addPattern, patterns } from '../../helpers/generator';
+import { deriveMax } from 'Components/Musiciel/Musiciel';
+import { AIR_GUITAR_OFFSET } from 'utils/constants';
 
 const ableton = ['Drums2', 'Bass1', 'Chords3', 'Melodies4'];
 
@@ -14,7 +16,6 @@ const Musicumulus = ({
   baseWidth,
   nuageName,
   musicSheet,
-  deriveMax,
   initialPos,
   pentaKey,
   replacementPos,
@@ -79,7 +80,7 @@ const Musicumulus = ({
 
     const twinTo = (index, cumulus) => () => {
       TweenMax.to(cumulus, random(1, 3), {
-        x: musicSheet[index].note * deriveMax,
+        x: musicSheet[index].note * (deriveMax - 2 * AIR_GUITAR_OFFSET) + AIR_GUITAR_OFFSET,
         y: musicSheet[index].chordAltitude,
         onStart: () => {
           if (index > 0) {

@@ -2,18 +2,20 @@ import React from 'react';
 import { Nuage } from 'Components/Cumulus/Nuage';
 import styled from 'styled-components';
 
+import { AIR_GUITAR_OFFSET } from 'utils/constants';
+
 const RightNote = styled.div`
   opacity: 0.7;
   position: absolute;
   top: ${props => props.chordAltitude}px;
-  right: 30px;
+  right: ${AIR_GUITAR_OFFSET}px;
 `;
 
 const LeftNote = styled.div`
   opacity: 0.7;
   position: absolute;
   top: ${props => props.chordAltitude}px;
-  left: 30px;
+  left: ${AIR_GUITAR_OFFSET}px;
 `;
 
 const CloudChord = ({ chord, baseWidth }) => {
