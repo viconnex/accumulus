@@ -5,7 +5,7 @@ import { Nuage } from './Nuage';
 import Tone from 'tone';
 import './style.css';
 import { playNote, addPattern, patterns } from '../../helpers/generator';
-import { deriveMax } from 'Components/Musiciel/Musiciel';
+import { deriveMax, cloudBaseWidth } from 'Components/Musiciel/Musiciel';
 import { AIR_GUITAR_OFFSET } from 'utils/constants';
 
 const ableton = ['Drums2', 'Bass1', 'Chords3', 'Melodies4'];
@@ -19,6 +19,7 @@ const Musicumulus = ({
   initialPos,
   pentaKey,
   replacementPos,
+  isOptimal,
 }) => {
   // reference to the DOM node
   var cumulus = null;
@@ -89,7 +90,10 @@ const Musicumulus = ({
 
     const twinTo = (index, cumulus) => () => {
       TweenMax.to(cumulus, debug ? 1 : random(1, 3), {
-        x: musicSheet[index].note * (deriveMax - 2 * AIR_GUITAR_OFFSET) + AIR_GUITAR_OFFSET,
+        x:
+          musicSheet[index].note * (deriveMax - 2 * AIR_GUITAR_OFFSET - 2 * cloudBaseWidth) +
+          AIR_GUITAR_OFFSET +
+          cloudBaseWidth,
         y: musicSheet[index].chordAltitude,
         onStart: () => {
           if (index > 0) {
@@ -116,7 +120,7 @@ const Musicumulus = ({
 
   return (
     <div id={cloudId} ref={div => (cumulus = div)} className="cumulus" style={{ opacity: 0.9 }}>
-      <Nuage color="white" nuageName={nuageName} baseWidth={baseWidth} />
+      <Nuage color={isOptimal ? 'yellow' : 'white'} nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
 };

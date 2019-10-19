@@ -30,29 +30,7 @@ export const deriveMax = window.innerWidth - cloudBaseWidth;
 const verticalspace = Math.round((musicSheetHeight - headerHeight) / 2.5);
 
 const REPLACEMENT_THRESHOLD = 0.9;
-
-const createMusiCloud = (id, name, sheet, initialPos, baseWidth) => {
-  const cloud = {
-    id,
-    name,
-    sheet,
-    initialPos,
-    baseWidth,
-  };
-  const closeWords = [];
-  sheet.forEach((chord, index) => {
-    if (1 - chord.note > REPLACEMENT_THRESHOLD) {
-      closeWords.push({ x: 30, y: chord.chordAltitude, index, pos: 'left' });
-    }
-    if (chord.note > REPLACEMENT_THRESHOLD) {
-      closeWords.push({ x: deriveMax - 30, y: chord.chordAltitude, index, pos: 'right' });
-    }
-  });
-  if (closeWords.length > 0) {
-    cloud.replacementPos = closeWords[Math.floor(Math.random() * closeWords.length)];
-  }
-  return cloud;
-};
+const SIMILARITY_GAP_THRESHOLD = 0.1;
 
 const initialPos = sheet => {
   return { x: sheet[0].note * (deriveMax - AIR_GUITAR_OFFSET) + AIR_GUITAR_OFFSET, y: chuteMax };
@@ -66,6 +44,7 @@ const Musiciel = ({ location: { search } }) => {
   const [musicloud, setMusicloud] = useState(null);
   const [nuageName, setNuageName] = useState('');
   const [hasAlreadyDrawn, setHasAlreadyDrawn] = useState(false);
+  const [targets, setTargets] = useState([Math.random(), Math.random(), Math.random(), Math.random()]);
   const [words, setWords] = useState([
     { left: 'ricochet', right: 'sapin', color: 'white' },
     { left: 'flibustier', right: 'verrou', color: 'white' },
@@ -81,6 +60,38 @@ const Musiciel = ({ location: { search } }) => {
       color: wordPair.color,
     };
   });
+
+  const createMusiCloud = (id, name, sheet, initialPos, baseWidth) => {
+    const cloud = {
+      id,
+      name,
+      sheet,
+      initialPos,
+      baseWidth,
+      isOptimal: false,
+    };
+    const closeWords = [];
+    let optimalPath = 0;
+
+    sheet.forEach((chord, index) => {
+      if (1 - chord.note > REPLACEMENT_THRESHOLD) {
+        closeWords.push({ x: 30, y: chord.chordAltitude, index, pos: 'left' });
+      }
+      if (chord.note > REPLACEMENT_THRESHOLD) {
+        closeWords.push({ x: deriveMax - 30, y: chord.chordAltitude, index, pos: 'right' });
+      }
+      if (Math.abs(chord.note - targets[index]) < SIMILARITY_GAP_THRESHOLD) {
+        optimalPath += 1;
+      }
+    });
+    if (closeWords.length > 0) {
+      cloud.replacementPos = closeWords[Math.floor(Math.random() * closeWords.length)];
+    }
+    if (optimalPath === 4) {
+      cloud.isOptimal = true;
+    }
+    return cloud;
+  };
 
   const createRandomSheet = () => {
     return chords.map(({ chordAltitude, leftNote, rightNote }) => ({
@@ -187,6 +198,9 @@ const Musiciel = ({ location: { search } }) => {
       words[musicloud.replacementPos.index] = { ...wordToUpdate, [musicloud.replacementPos.pos]: musicloud.name };
       setWords(words);
     }
+    if (musicloud.isOptimal) {
+      setTargets([Math.random(), Math.random(), Math.random(), Math.random()]);
+    }
 
     const uploadedCloud = musicloud;
     if (!(musicloud.replacementPos && musicloud.name === uploadedCloudName)) {
@@ -211,7 +225,6 @@ const Musiciel = ({ location: { search } }) => {
     const newClouds = clouds.splice(1);
     setClouds(newClouds);
   };
-  console.log(musicloud);
   return (
     <div className="ciel">
       {clouds.map(cloud => (
@@ -226,7 +239,7 @@ const Musiciel = ({ location: { search } }) => {
           style={{ opacity: 0.6 }}
         />
       ))}
-      <AirGuitar chords={chords} baseWidth={cloudBaseWidth} />
+      <AirGuitar targets={targets} chords={chords} baseWidth={cloudBaseWidth} />
       {musicloud && (
         <Musicumulus
           cloudId={musicloud.id}
@@ -237,6 +250,7 @@ const Musiciel = ({ location: { search } }) => {
           nuageName={musicloud.name}
           musicSheet={musicloud.sheet}
           baseWidth={musicloud.baseWidth}
+          isOptimal={musicloud.isOptimal}
           handleSkyLanding={handleSkyLanding}
           style={{ opacity: 0.9 }}
           replacementPos={musicloud.replacementPos}
