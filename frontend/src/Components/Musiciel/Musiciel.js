@@ -92,7 +92,7 @@ const Musiciel = ({ location: { search } }) => {
   };
 
   const getBaseWidth = () => {
-    return Math.max(Math.round(random(50, 130)), nuageName.length * 8);
+    return Math.max(Math.round(random(70, 130)), nuageName.length * 8);
   };
 
   // const urlParam = new URLSearchParams(search);
@@ -181,7 +181,6 @@ const Musiciel = ({ location: { search } }) => {
 
   const handleSkyLanding = async () => {
     let uploadedCloudName = musicloud.name;
-
     if (musicloud.replacementPos) {
       const wordToUpdate = words[musicloud.replacementPos.index];
       uploadedCloudName = words[musicloud.replacementPos.index][musicloud.replacementPos.pos];
@@ -190,8 +189,7 @@ const Musiciel = ({ location: { search } }) => {
     }
 
     const uploadedCloud = musicloud;
-
-    if (!(musicloud.initialPos && musicloud.name === uploadedCloudName)) {
+    if (!(musicloud.replacementPos && musicloud.name === uploadedCloudName)) {
       uploadedCloud.initialPos = {
         x: document.getElementById(uploadedCloud.id).getBoundingClientRect().x,
         y: document.getElementById(uploadedCloud.id).getBoundingClientRect().y,
@@ -206,10 +204,12 @@ const Musiciel = ({ location: { search } }) => {
       x: document.getElementById(clouds[0].id).getBoundingClientRect().x,
       y: document.getElementById(clouds[0].id).getBoundingClientRect().y,
     };
-    const newMusicloud = clouds.shift();
+    const newMusicloud = clouds[0];
     const sheet = await getMusicSheet(newMusicloud.name, chords);
-    setMusicloud(createMusiCloud(cloudId, newMusicloud.name, sheet, initialPos, newMusicloud.baseWidth));
-    setClouds(clouds);
+    setMusicloud(createMusiCloud(newMusicloud.id, newMusicloud.name, sheet, initialPos, newMusicloud.baseWidth));
+
+    const newClouds = clouds.splice(1);
+    setClouds(newClouds);
   };
   return (
     <div className="ciel">
@@ -250,7 +250,7 @@ const Musiciel = ({ location: { search } }) => {
           initialPos={cloud.initialPos}
           cloudHeight={cloudHeight}
           meanHeight={uploadedHeight / 2}
-          wanderingHeight={uploadedHeight}
+          wanderingHeight={uploadedHeight - cloudHeight}
           style={{ opacity: 0.5 }}
         />
       ))}

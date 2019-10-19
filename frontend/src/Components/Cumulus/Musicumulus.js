@@ -9,7 +9,7 @@ import { deriveMax } from 'Components/Musiciel/Musiciel';
 import { AIR_GUITAR_OFFSET } from 'utils/constants';
 
 const ableton = ['Drums2', 'Bass1', 'Chords3', 'Melodies4'];
-
+const debug = false;
 const Musicumulus = ({
   cloudId,
   handleSkyLanding,
@@ -37,7 +37,7 @@ const Musicumulus = ({
     });
 
     const blowUp = (cumulus, note) => {
-      TweenMax.to(cumulus, 5, {
+      TweenMax.to(cumulus, debug ? 0.1 : 5, {
         y: 100,
         // opacity: replacementPos ? 1 : 0,
         onStart: () => null, // playNote(note),
@@ -51,22 +51,28 @@ const Musicumulus = ({
               });
             }
             hoverinCloud(95);
-            setTimeout(() => {
-              Tone.Transport.stop();
-              Tone.Transport.cancel();
-              let initialVolume = -10;
-              const interval = setInterval(() => {
-                volume.volume.value = initialVolume;
-                initialVolume -= 0.25;
-              }, 100);
-              setTimeout(() => {
-                clearInterval(interval);
-                resolve(cumulus);
-              }, 5000);
-            }, 10000);
+            setTimeout(
+              () => {
+                Tone.Transport.stop();
+                Tone.Transport.cancel();
+                let initialVolume = -10;
+                const interval = setInterval(() => {
+                  volume.volume.value = initialVolume;
+                  initialVolume -= 0.25;
+                }, 100);
+                setTimeout(
+                  () => {
+                    clearInterval(interval);
+                    resolve(cumulus);
+                  },
+                  debug ? 50 : 1000,
+                );
+              },
+              debug ? 10 : 2000,
+            );
           }).then(cumulus => {
             if (!replacementPos) {
-              TweenMax.to(cumulus, 5, { opacity: 0, onComplete: () => arrive(true) });
+              TweenMax.to(cumulus, debug ? 0.3 : 3, { opacity: 0, onComplete: () => arrive(true) });
             } else {
               TweenMax.to(cumulus, 2, {
                 x: replacementPos.x,
@@ -82,7 +88,7 @@ const Musicumulus = ({
     };
 
     const twinTo = (index, cumulus) => () => {
-      TweenMax.to(cumulus, random(1, 3), {
+      TweenMax.to(cumulus, debug ? 1 : random(1, 3), {
         x: musicSheet[index].note * (deriveMax - 2 * AIR_GUITAR_OFFSET) + AIR_GUITAR_OFFSET,
         y: musicSheet[index].chordAltitude,
         onStart: () => {
