@@ -208,6 +208,7 @@ const Musiciel = ({ location: { search } }) => {
         x: document.getElementById(uploadedCloud.id).getBoundingClientRect().x,
         y: document.getElementById(uploadedCloud.id).getBoundingClientRect().y,
       };
+      uploadedCloud.name = uploadedCloudName;
       const newUploadedCloudsList = [...uploadedClouds, uploadedCloud];
       setUploadedClouds(newUploadedCloudsList);
     }
