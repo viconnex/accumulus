@@ -27,25 +27,26 @@ const StarTarget = styled.div`
   left: ${props => props.horizontalPos}px;
 `;
 
-const CloudChord = ({ chord, baseWidth, target }) => {
+const CloudChord = ({ chord, baseWidth, target, background }) => {
   const horizontalPos =
     target * (deriveMax - 2 * AIR_GUITAR_OFFSET - 2 * cloudBaseWidth) + AIR_GUITAR_OFFSET + cloudBaseWidth;
   return (
     <React.Fragment>
       <LeftNote chordAltitude={chord.chordAltitude}>
-        <Nuage color={chord.color} nuageName={chord.leftNote} baseWidth={baseWidth} borderWidth={2} />
+        <Nuage color={background} nuageName={chord.leftNote} baseWidth={baseWidth} borderWidth={0} />
       </LeftNote>
       <StarTarget chordAltitude={chord.chordAltitude} horizontalPos={horizontalPos}>
         <img alt="" src={Star} style={{ width: '25px' }} />
       </StarTarget>
       <RightNote chordAltitude={chord.chordAltitude}>
-        <Nuage color={chord.color} nuageName={chord.rightNote} baseWidth={baseWidth} borderWidth={2} />
+        <Nuage color={background} nuageName={chord.rightNote} baseWidth={baseWidth} borderWidth={0} />
       </RightNote>
     </React.Fragment>
   );
 };
 
 const AirGuitar = ({ targets, chords, baseWidth }) => {
+  const backgrounds = ['#F8B195', '#F67280', '#C06C84', '#355C7D'];
   return (
     <div>
       {chords.map((chord, index) => {
@@ -55,6 +56,7 @@ const AirGuitar = ({ targets, chords, baseWidth }) => {
             chord={chord}
             baseWidth={baseWidth}
             target={targets[index]}
+            background={backgrounds[index]}
           />
         );
       })}
