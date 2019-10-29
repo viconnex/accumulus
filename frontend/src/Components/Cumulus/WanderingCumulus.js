@@ -9,7 +9,16 @@ import { deriveMax, cloudBaseWidth } from 'Components/Musiciel/Musiciel';
 
 const twoPi = Math.PI * 2;
 
-const WanderingCumulus = ({ cloudId, nuageName, baseWidth, cloudHeight, meanHeight, wanderingHeight, initialPos }) => {
+const WanderingCumulus = ({
+  cloudId,
+  isOptimal,
+  nuageName,
+  baseWidth,
+  cloudHeight,
+  meanHeight,
+  wanderingHeight,
+  initialPos,
+}) => {
   // reference to the DOM node
   var cumulus = null;
   const [isVisibleX, setIsVisibleX] = useState(false);
@@ -74,7 +83,7 @@ const WanderingCumulus = ({ cloudId, nuageName, baseWidth, cloudHeight, meanHeig
       className="cumulus"
       style={{ opacity: isVisibleX && isVisibleY ? 0.7 : 0 }}
     >
-      <Nuage color="white" nuageName={nuageName} baseWidth={baseWidth} />
+      <Nuage color={isOptimal ? 'yellow' : 'white'} fontColor={'black'} nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
 };

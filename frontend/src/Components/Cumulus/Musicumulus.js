@@ -117,15 +117,13 @@ const Musicumulus = ({
 
     twinTo(0, cumulus)();
   }, [cumulus]);
+  let background = replacementPos ? replacementPos.background : '#864cff';
+
+  if (isOptimal) background = 'yellow';
 
   return (
     <div id={cloudId} ref={div => (cumulus = div)} className="cumulus" style={{ opacity: 0.9 }}>
-      <Nuage
-        color={isOptimal ? 'yellow' : '#864cff'}
-        fontColor={isOptimal ? 'black' : 'white'}
-        nuageName={nuageName}
-        baseWidth={baseWidth}
-      />
+      <Nuage color={background} fontColor={isOptimal ? 'black' : 'white'} nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
 };

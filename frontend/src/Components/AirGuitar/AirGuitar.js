@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { AIR_GUITAR_OFFSET } from 'utils/constants';
 import Star from 'icons/star.png';
-import { deriveMax, cloudBaseWidth } from 'Components/Musiciel/Musiciel';
+import { deriveMax, cloudBaseWidth, backgrounds } from 'Components/Musiciel/Musiciel';
 
 const RightNote = styled.div`
   opacity: 0.7;
@@ -33,20 +33,31 @@ const CloudChord = ({ chord, baseWidth, target, background }) => {
   return (
     <React.Fragment>
       <LeftNote chordAltitude={chord.chordAltitude}>
-        <Nuage color={background} nuageName={chord.leftNote} baseWidth={baseWidth} borderWidth={0} />
+        <Nuage
+          fontColor={'white'}
+          color={background}
+          nuageName={chord.leftNote}
+          baseWidth={baseWidth}
+          borderWidth={0}
+        />
       </LeftNote>
       <StarTarget chordAltitude={chord.chordAltitude} horizontalPos={horizontalPos}>
         <img alt="" src={Star} style={{ width: '25px' }} />
       </StarTarget>
       <RightNote chordAltitude={chord.chordAltitude}>
-        <Nuage color={background} nuageName={chord.rightNote} baseWidth={baseWidth} borderWidth={0} />
+        <Nuage
+          fontColor={'white'}
+          color={background}
+          nuageName={chord.rightNote}
+          baseWidth={baseWidth}
+          borderWidth={0}
+        />
       </RightNote>
     </React.Fragment>
   );
 };
 
 const AirGuitar = ({ targets, chords, baseWidth }) => {
-  const backgrounds = ['#F8B195', '#F67280', '#C06C84', '#355C7D'];
   return (
     <div>
       {chords.map((chord, index) => {

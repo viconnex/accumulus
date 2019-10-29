@@ -30,7 +30,9 @@ export const deriveMax = window.innerWidth - cloudBaseWidth;
 const verticalspace = Math.round((musicSheetHeight - headerHeight) / 2.5);
 
 const REPLACEMENT_THRESHOLD = 0.9;
-const SIMILARITY_GAP_THRESHOLD = 0.2;
+const SIMILARITY_GAP_THRESHOLD = 0.15;
+
+export const backgrounds = ['#F8B195', '#F67280', '#C06C84', '#355C7D'];
 
 const initialPos = sheet => {
   return { x: sheet[0].note * (deriveMax - AIR_GUITAR_OFFSET) + AIR_GUITAR_OFFSET, y: chuteMax };
@@ -74,10 +76,16 @@ const Musiciel = ({ location: { search } }) => {
     let optimalPath = 0;
     sheet.forEach((chord, index) => {
       if (1 - chord.note > REPLACEMENT_THRESHOLD) {
-        closeWords.push({ x: 30, y: chord.chordAltitude, index, pos: 'left' });
+        closeWords.push({ x: 30, y: chord.chordAltitude, index, pos: 'left', background: backgrounds[index] });
       }
       if (chord.note > REPLACEMENT_THRESHOLD) {
-        closeWords.push({ x: deriveMax - 30, y: chord.chordAltitude, index, pos: 'right' });
+        closeWords.push({
+          x: deriveMax - 30,
+          y: chord.chordAltitude,
+          index,
+          pos: 'right',
+          background: backgrounds[index],
+        });
       }
       if (Math.abs(chord.note - targets[index]) < SIMILARITY_GAP_THRESHOLD) {
         optimalPath += 1;
@@ -267,6 +275,7 @@ const Musiciel = ({ location: { search } }) => {
           meanHeight={uploadedHeight / 2}
           wanderingHeight={uploadedHeight - cloudHeight}
           style={{ opacity: 0.5 }}
+          isOptimal={cloud.isOptimal}
         />
       ))}
       <div className="superficiel">
