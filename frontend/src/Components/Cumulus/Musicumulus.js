@@ -44,14 +44,12 @@ const Musicumulus = ({
         onStart: () => null, // playNote(note),
         onComplete: () =>
           new Promise(resolve => {
-            function hoverinCloud(destination) {
-              TweenMax.to(cumulus, 3, {
-                y: destination,
-                ease: Bounce.easeOut,
-                onComplete: () => hoverinCloud(destination === 80 ? 100 : 80),
-              });
-            }
-            hoverinCloud(80);
+            let hoveringAltitude = 80;
+            const hoveringInterval = setInterval(() => {
+              TweenMax.to(cumulus, 0.5, { y: hoveringAltitude, ease: Bounce.easeOut });
+              hoveringAltitude = hoveringAltitude === 100 ? 80 : 100;
+            }, 500);
+
             setTimeout(
               () => {
                 Tone.Transport.stop();
@@ -63,6 +61,7 @@ const Musicumulus = ({
                 }, 100);
                 setTimeout(
                   () => {
+                    clearInterval(hoveringInterval);
                     clearInterval(interval);
                     resolve(cumulus);
                   },
@@ -79,9 +78,7 @@ const Musicumulus = ({
                 x: replacementPos.x,
                 y: replacementPos.y,
                 ease: Bounce.easeOut,
-                onComplete: () => {
-                  arrive(true);
-                },
+                onComplete: () => arrive(true),
               });
             }
           }),
@@ -117,13 +114,17 @@ const Musicumulus = ({
 
     twinTo(0, cumulus)();
   }, [cumulus]);
-  let background = replacementPos ? replacementPos.background : '#864cff';
-
-  if (isOptimal) background = 'yellow';
+  const color = { fontColor: 'black', background: 'white' };
+  if (isOptimal) {
+    color.background = 'yellow';
+  } else if (replacementPos) {
+    color.background = replacementPos.background;
+    color.fontColor = 'white';
+  }
 
   return (
     <div id={cloudId} ref={div => (cumulus = div)} className="cumulus" style={{ opacity: 0.9 }}>
-      <Nuage color={background} fontColor={isOptimal ? 'black' : 'white'} nuageName={nuageName} baseWidth={baseWidth} />
+      <Nuage color={color.background} fontColor={color.fontColor} nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
 };
