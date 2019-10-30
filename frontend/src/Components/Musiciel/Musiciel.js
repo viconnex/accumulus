@@ -29,7 +29,7 @@ const uploadedHeight = Math.round(window.innerHeight * uploadedScaleFactor);
 export const deriveMax = window.innerWidth - cloudBaseWidth;
 const verticalspace = Math.round((musicSheetHeight - headerHeight) / 2.5);
 
-const REPLACEMENT_THRESHOLD = 0.9;
+const REPLACEMENT_THRESHOLD = 0.4;
 const SIMILARITY_GAP_THRESHOLD = 0.15;
 
 export const backgrounds = ['#F8B195', '#F67280', '#C06C84', '#355C7D'];
@@ -74,11 +74,12 @@ const Musiciel = ({ location: { search } }) => {
     };
     const closeWords = [];
     let optimalPath = 0;
+    console.log('sheet', sheet);
     sheet.forEach((chord, index) => {
-      if (1 - chord.note > REPLACEMENT_THRESHOLD) {
+      if (chord.leftSim > REPLACEMENT_THRESHOLD) {
         closeWords.push({ x: 30, y: chord.chordAltitude, index, pos: 'left', background: backgrounds[index] });
       }
-      if (chord.note > REPLACEMENT_THRESHOLD) {
+      if (chord.rightSim > REPLACEMENT_THRESHOLD) {
         closeWords.push({
           x: deriveMax - 30,
           y: chord.chordAltitude,
