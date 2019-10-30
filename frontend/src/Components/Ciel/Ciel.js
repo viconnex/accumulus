@@ -48,8 +48,11 @@ const Ciel = ({ cloud9 }) => {
   };
 
   const handleUpload = autoUploadList => {
-    const uploadClouds = autoUploadList || clouds;
+    let uploadClouds = autoUploadList || clouds;
 
+    if (uploadClouds.length === 0 && nuageName) {
+      uploadClouds = addCloud(nuageName);
+    }
     if (uploadClouds.length === 0) {
       // eslint-disable-next-line no-alert
       alert('Pas de nuage en partance pour le voyage. Trouve un nommage');
@@ -139,7 +142,7 @@ const Ciel = ({ cloud9 }) => {
               setNuageName(event.target.value);
             }}
             value={nuageName}
-            placeholder={clouds.length === 0 && !hasAlreadyDrawn ? 'Entre un nom de nuage' : null}
+            placeholder={clouds.length === 0 && !hasAlreadyDrawn ? 'Nuage' : null}
           />
         </form>
         <Tooltip title="Mouillage">
