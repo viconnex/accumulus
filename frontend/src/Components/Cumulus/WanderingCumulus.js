@@ -83,7 +83,7 @@ const WanderingCumulus = ({
       className="cumulus"
       style={{ opacity: isVisibleX && isVisibleY ? 0.7 : 0 }}
     >
-      <Nuage color={isOptimal ? 'yellow' : 'white'} fontColor={'black'} nuageName={nuageName} baseWidth={baseWidth} />
+      <Nuage color={'white'} fontColor={'black'} nuageName={nuageName} baseWidth={baseWidth} />
     </div>
   );
 };

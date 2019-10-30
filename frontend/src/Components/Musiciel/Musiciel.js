@@ -74,7 +74,6 @@ const Musiciel = ({ location: { search } }) => {
     };
     const closeWords = [];
     let optimalPath = 0;
-    console.log('sheet', sheet);
     sheet.forEach((chord, index) => {
       if (chord.leftSim > REPLACEMENT_THRESHOLD) {
         closeWords.push({ x: 30, y: chord.chordAltitude, index, pos: 'left', background: backgrounds[index] });
