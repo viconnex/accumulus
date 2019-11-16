@@ -38,6 +38,16 @@ const initialPos = sheet => {
   return { x: sheet[0].note * (deriveMax - AIR_GUITAR_OFFSET) + AIR_GUITAR_OFFSET, y: chuteMax };
 };
 
+const getChordsFromWords = words =>
+  words.map((wordPair, index) => {
+    return {
+      chordAltitude: musicSheetHeight + uploadedHeight - index * verticalspace,
+      leftNote: wordPair.left,
+      rightNote: wordPair.right,
+      color: wordPair.color,
+    };
+  });
+
 const Musiciel = ({ location: { search } }) => {
   const [cloudId, setCloudId] = useState(0);
   const [clouds, setClouds] = useState([]);
@@ -54,14 +64,7 @@ const Musiciel = ({ location: { search } }) => {
     { left: 'tennis', right: 'coquelicot', color: 'white' },
   ]);
 
-  const chords = words.map((wordPair, index) => {
-    return {
-      chordAltitude: musicSheetHeight + uploadedHeight - index * verticalspace,
-      leftNote: wordPair.left,
-      rightNote: wordPair.right,
-      color: wordPair.color,
-    };
-  });
+  const chords = getChordsFromWords(words);
 
   const createMusiCloud = (id, name, sheet, initialPos, baseWidth) => {
     const cloud = {
@@ -227,7 +230,8 @@ const Musiciel = ({ location: { search } }) => {
       y: document.getElementById(clouds[0].id).getBoundingClientRect().y,
     };
     const newMusicloud = clouds[0];
-    const sheet = await getMusicSheet(newMusicloud.name, chords);
+    const newChords = getChordsFromWords(words);
+    const sheet = await getMusicSheet(newMusicloud.name, newChords);
     setMusicloud(createMusiCloud(newMusicloud.id, newMusicloud.name, sheet, initialPos, newMusicloud.baseWidth));
 
     const newClouds = clouds.splice(1);
