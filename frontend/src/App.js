@@ -10,8 +10,8 @@ function App() {
     <Router basename="/">
       <div className="App">
         <Switch>
-          <Route path="/random" component={Random} />
-          <Route exact path="/cloud-nine" component={Musiciel} />
+          {/* <Route path="/random" component={Random} /> */}
+          {/* <Route exact path="/cloud-nine" component={Musiciel} /> */}
           <Route path="/" component={Ciel} />
         </Switch>
       </div>
