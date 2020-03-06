@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import sockeIOClient from 'socket.io-client';
 
-import TextField from "@material-ui/core/TextField";
+import TextField from '@material-ui/core/TextField';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 
@@ -9,11 +8,11 @@ import { fetchRequest } from 'utils/helpers';
 import UploadLogo from 'icons/upload.png';
 import RainLogo from 'icons/rain.png';
 
+import dictionnage from 'utils/dictionnage.json';
+
 import Cumulus from '../Cumulus/Cumulus';
 import './style.css';
-import { API_BASE_URL, API_GATEWAY_URL, API_GATEWAY_PATH } from 'utils/constants';
-
-// const rimages = require('utils/dictionnage.json');
+import { API_BASE_URL } from 'utils/constants';
 
 const rimeWith = (word, suffixe) => {
   const preRime = word.split(suffixe);
@@ -26,8 +25,6 @@ const nuagesToCloud = (name, clouds) => {
   fetchRequest(url, 'POST', body);
 };
 
-const socket = sockeIOClient(API_GATEWAY_URL, { path: API_GATEWAY_PATH });
-
 const Ciel = ({ cloud9 }) => {
   // const [clouds, setClouds] = useState(['age', 'cage', 'rage', 'duage', 'hommage']);
   const [clouds, setClouds] = useState([]);
@@ -38,16 +35,6 @@ const Ciel = ({ cloud9 }) => {
   const [cloudsRainedCount, setCloudsRainedCount] = useState(0);
   const [isRaining, makeItRain] = useState(false);
 
-  // useEffect(() => {
-  //   function handleUpcoming(upcomingClouds) {
-  //     const l = [...clouds, ...upcomingClouds.filter(newCloud => !clouds.includes(newCloud))];
-  //     setClouds(l);
-  //   }
-  //   if (cloud9) {
-  //     socket.on('upload', handleUpcoming);
-  //   }
-  // }, [clouds]);
-
   const addCloud = nuageName => {
     const l = [...clouds, nuageName];
     setClouds(l);
@@ -57,12 +44,16 @@ const Ciel = ({ cloud9 }) => {
   const dessineLeNuage = event => {
     event.preventDefault();
     var nuageNameLowerCase = nuageName.split(' ')[0].toLocaleLowerCase();
-    // if (!rimeWith(nuageNameLowerCase, 'age') && !rimeWith(nuageNameLowerCase, 'âge')) {
-    //   // eslint-disable-next-line no-alert
-    //   alert('Ce mot ne rime pas avec nuage');
-    //   return;
-    // }
-
+    if (!rimeWith(nuageNameLowerCase, 'age') && !rimeWith(nuageNameLowerCase, 'âge')) {
+      // eslint-disable-next-line no-alert
+      alert('Ce mot ne rime pas avec nuage');
+      return;
+    }
+    if (!dictionnage.hasOwnProperty(nuageNameLowerCase)) {
+      //  eslint-disable-next-line no-alert
+      alert('Je ne connais pas ce nommage');
+      return;
+    }
     if (nuageNameLowerCase.charAt(nuageNameLowerCase.length - 1) === ' ') {
       nuageNameLowerCase = nuageNameLowerCase.slice(0, -1);
     }
@@ -99,7 +90,6 @@ const Ciel = ({ cloud9 }) => {
     if (upload && cloudsLandedCount >= clouds.length && clouds.length > 0) {
       setUpload(false);
       setCloudsLandedCount(0);
-      if (!cloud9) socket.emit('upload', clouds);
       setClouds([]);
     }
   }, [cloudsLandedCount, upload, clouds]);
